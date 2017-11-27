@@ -1,0 +1,10 @@
+.form-control {
+    max-width: 170px;
+    margin-left: 4px;
+    display: inline;
+}
+
+#currentDateElement {
+    font-family: monospace;
+    font-weight: bold;
+}

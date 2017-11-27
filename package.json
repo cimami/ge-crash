@@ -1,0 +1,37 @@
+{
+  "name": "ge-crash",
+  "version": "1.0.0",
+  "description": "Accidents vizualisation in Geneva",
+  "main": "gulpfile.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cimami/ge-crash.git"
+  },
+  "keywords": [
+    "accidents",
+    "opendata",
+    "geneva"
+  ],
+  "author": "Maxime BURRI, Michaël POLLA, Salvatore Cicciù",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cimami/ge-crash/issues"
+  },
+  "homepage": "https://github.com/cimami/ge-crash#readme",
+  "devDependencies": {
+    "browser-sync": "2.18.13",
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "3.9.0",
+    "gulp-filter": "^5.0.1",
+    "gulp-header": "1.8.9",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "3.0.0"
+  }
+}
