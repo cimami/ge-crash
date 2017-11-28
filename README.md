@@ -18,7 +18,7 @@ HES-SO MSE Visualization Information course project
 
 
 ## To do
-- Take in account the time of accident (not only the date)
+- ~~Take in account the time of accident (not only the date)~~
 - Add animation when accident appears
 - Add other informations (numbers of dead, injured, ...)
 - Add stop/reset

@@ -75,6 +75,15 @@ def arrange(rows):
         accident["LAT"] = converter.CHtoWGSlat(accident["E"]-2000000.00 , accident["N"]-1000000.00 )
         accident["LNG"] = converter.CHtoWGSlng(accident["E"]-2000000.00 , accident["N"]-1000000.00 )
 
+        # Concat date and hour
+        datetimeAccident = accident["DATE_"][:10]
+        time = accident["HEURE"][10:]
+        if(time):
+            datetimeAccident = datetimeAccident + time
+        else:
+            datetimeAccident = datetimeAccident + " 00:00:00"
+        accident["DATE_"] = datetimeAccident
+
 reader = csv.DictReader(reencode(open('./CSV_OTC_ACCIDENTS/OTC_ACCIDENTS.csv', 'rb')), delimiter=";")
 rows = list(reader)
 arrange(rows)
