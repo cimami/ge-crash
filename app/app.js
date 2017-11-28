@@ -12,6 +12,7 @@ $(document).ready(function () {
   var inputDateEnd = $("#inputDateEnd");
   var slider = $("#slider");
   var currentDateElement = $("#currentDateElement");
+  var circlesContainer = $("#circlesContainer");
   var accidents = [];
 
   var timer;
@@ -62,12 +63,38 @@ $(document).ready(function () {
           // If we need to draw accident
           if(accident.DATE_ < currentDate){
             // Draw Circle
-            var circle = L.circle([accident.LAT, accident.LNG], {
-              color: 'red',
-              fillColor: '#f03',
-              fillOpacity: 0.5,
+            var latLng = L.latLng(accident.LAT, accident.LNG);
+
+            var circle = L.circle(latLng, {
+              fillColor : '#d10000',
+              color: '#d10000',
+              fillOpacity : 1,
+              stroke : false,
               radius: 10
             }).addTo(map);
+            
+            // Get position real of lattitude and longitude
+            var posCircleAnimation = map.layerPointToContainerPoint(
+              map.latLngToLayerPoint(L.latLng(latLng))
+            );
+            
+            // Add circle at good place, and animate
+            var circleAnimation = $("<span/>", {
+                "class": "circle",
+                "css" : {
+                  "left" : posCircleAnimation.x + "px",
+                  "top" : posCircleAnimation.y + "px"
+                }
+              })
+              .appendTo(circlesContainer)
+              .animate({
+              opacity: 0.0,
+              height: "70px",
+              width: "70px"
+              }, 300, function() {
+                $(this).remove();
+              });
+           
           }
           // Remove accidents from accidents not drawn
           else{
