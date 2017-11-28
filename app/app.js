@@ -1,8 +1,12 @@
 $(document).ready(function () {
+
+  var circles = L.layerGroup();
+
   // Create the map
   var options = {
     attributionControl: false,
-    zoomControl: false
+    zoomControl: false,
+    layers: [circles]
   }
   var map = L.map('mapCrash', options).setView([46.2202289, 6.158851], 10);
   var access = "pk.eyJ1IjoibWF4aW1lYnVycmkiLCJhIjoiY2phZmUzeTBpMjRiNTJ3cTgxeWZkdGdydyJ9.m7Oycp5uo2-49hUmBVcXFg";
@@ -24,6 +28,7 @@ $(document).ready(function () {
   // On play click
   // TODO: Animations, removes circle when replay
   btnPlay.click(function() {
+    circles.clearLayers(); // reset circles layer
     var dateBegin = new Date(inputDateBegin.val());
     var dateEnd = new Date(inputDateEnd.val());
     var timeExtend = dateEnd.getTime() - dateBegin.getTime();
@@ -67,7 +72,13 @@ $(document).ready(function () {
               fillColor: '#f03',
               fillOpacity: 0.5,
               radius: 10
-            }).addTo(map);
+            })
+            .bindPopup("ID accident:" + accident.ID_ACCIDENT + "<br>" +
+                       "Cause:" + accident.CAUSE + "<br>" + 
+                       "Conséquences:"+ accident.CONSEQUENCES + "<br>" + 
+                       "Blessés légers:" + accident.NB_BLESSES_LEGERS + "<br>"+
+                       "Blessés graves:" + accident.NB_BLESSES_GRAVES)
+            .addTo(circles);
           }
           // Remove accidents from accidents not drawn
           else{
