@@ -4,7 +4,7 @@ HES-SO MSE Visualization Information course project
 ## Installation & execution
 
 ### Install gulp
-```npm install -g gulp```
+```npm install -g gulp```  
 ```npm install```
 
 ### Run
