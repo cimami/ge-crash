@@ -68,8 +68,8 @@ $(document).ready(function () {
             var circle = L.circle(latLng, {
               fillColor : '#d10000',
               color: '#d10000',
-              fillOpacity : 1,
-              stroke : false,
+              fillOpacity : 0.1,
+              weight: 0.5,
               radius: 10
             }).addTo(map);
             
