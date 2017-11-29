@@ -1,8 +1,12 @@
 $(document).ready(function () {
+
+  var circles = L.layerGroup();
+
   // Create the map
   var options = {
     attributionControl: false,
-    zoomControl: false
+    zoomControl: false,
+    layers: [circles]
   }
   var map = L.map('mapCrash', options).setView([46.2202289, 6.158851], 10);
   var access = "pk.eyJ1IjoibWF4aW1lYnVycmkiLCJhIjoiY2phZmUzeTBpMjRiNTJ3cTgxeWZkdGdydyJ9.m7Oycp5uo2-49hUmBVcXFg";
@@ -24,7 +28,8 @@ $(document).ready(function () {
 
   // On play click
   // TODO: Animations, removes circle when replay
-  btnPlay.click(function() {
+  btnPlay.click(function () {
+    circles.clearLayers(); // reset circles layer
     var dateBegin = new Date(inputDateBegin.val());
     var dateEnd = new Date(inputDateEnd.val());
     var timeExtend = dateEnd.getTime() - dateBegin.getTime();
@@ -33,68 +38,74 @@ $(document).ready(function () {
     var accidentsNotDrawn = accidentsBetweenTime.slice(); // Copy
 
     // Clear interval
-    clearInterval (timer);
+    clearInterval(timer);
     currentTime = 0;
     slider.val(0);
 
     // Each time frame
-    timer = setInterval (function() {
-      currentTime += TIME_FRAME;      
-      var currentSliderValue = currentTime*SLIDER_MAX_RANGE/TIME_BEGIN_TO_END;
+    timer = setInterval(function () {
+      currentTime += TIME_FRAME;
+      var currentSliderValue = currentTime * SLIDER_MAX_RANGE / TIME_BEGIN_TO_END;
       slider.val(currentSliderValue);
 
       // Finish ?
-      if(currentSliderValue > SLIDER_MAX_RANGE){
-        clearInterval (timer);
+      if (currentSliderValue > SLIDER_MAX_RANGE) {
+        clearInterval(timer);
         return;
       }
 
       // Show some accidents when it's time to calculate
-      if(currentTime % TIME_CALCULATION == 0){
-        var currentDate = new Date(dateBegin.getTime() + 
-          timeExtend * currentSliderValue/SLIDER_MAX_RANGE);
-        
+      if (currentTime % TIME_CALCULATION == 0) {
+        var currentDate = new Date(dateBegin.getTime() +
+          timeExtend * currentSliderValue / SLIDER_MAX_RANGE);
+
         currentDateElement.html(currentDate.toLocaleString());
 
         // Draw accidents who respect dates
-        for (var i in accidentsNotDrawn){
+        for (var i in accidentsNotDrawn) {
           var accident = accidentsNotDrawn[i];
 
           // If we need to draw accident
-          if(accident.DATE_ < currentDate){
+          if (accident.DATE_ < currentDate) {
             // Draw Circle
             var latLng = L.latLng(accident.LAT, accident.LNG);
 
             var circle = L.circle(latLng, {
-              fillColor : '#d10000',
+              fillColor: '#d10000',
               color: '#d10000',
-              fillOpacity : 0.1,
+              fillOpacity: 0.1,
               weight: 0.5,
-              radius: 10
-            }).addTo(map);
-            
+              radius: 5
+            }).bindPopup("ID accident:" + accident.ID_ACCIDENT + "<br>" +
+                "Cause:" + accident.CAUSE + "<br>" +
+                "Conséquences:" + accident.CONSEQUENCES + "<br>" +
+                "Blessés légers:" + accident.NB_BLESSES_LEGERS + "<br>" +
+                "Blessés graves:" + accident.NB_BLESSES_GRAVES)
+              .addTo(circles);
+
             // Get position real of lattitude and longitude
             var posCircleAnimation = map.layerPointToContainerPoint(
               map.latLngToLayerPoint(L.latLng(latLng))
             );
-            
+
             // Add circle at good place, and animate
             var circleAnimation = $("<span/>", {
-                "class": "circle",
-                "css" : {
-                  "left" : posCircleAnimation.x + "px",
-                  "top" : posCircleAnimation.y + "px"
-                }
-              })
+              "class": "circle",
+              "css": {
+                "left": posCircleAnimation.x + "px",
+                "top": posCircleAnimation.y + "px"
+              }
+            })
               .appendTo(circlesContainer)
               .animate({
-              opacity: 0.0,
-              height: "70px",
-              width: "70px"
-              }, 300, function() {
+                opacity: 0.0,
+                height: "70px",
+                width: "70px"
+              }, 300, function () {
                 $(this).remove();
               });
-           
+
+
           }
           // Remove accidents from accidents not drawn
           else{
