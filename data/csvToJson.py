@@ -1,20 +1,19 @@
 # -*- coding: utf8-*-
 import csv
 import json
-from GPSConverter import GPSConverter
+import codecs
 import datetime
+from GPSConverter import GPSConverter
 
-# The OTC_ACCIDENTS.csv is encoding with Windows-1250
-# If we decode and re encode utf8 some caractère like à are ŕ
-# !!! So : re-encode the file to utf8,
-# but in future, find a solution with this comment code to make 
-# conversion automatically
-def reencode(file):
-    for line in file:
-    #   yield line.decode('windows-1250').encode('utf8')
-        yield line
+# The OTC_ACCIDENTS.csv is encoded ih Windows-1252.
+# This converts it to utf8 (in fact, any encoding will be 'converted' to utf8)
+def convertfile():
+    with codecs.open('./data/CSV_OTC_ACCIDENTS/OTC_ACCIDENTS.csv', 'r', encoding = 'utf8') as file:
+        lines = file.read()
+    with codecs.open('./accidents.json', 'w', encoding = 'utf8') as file:
+        file.write(lines)
 
-# Convcerts some attributes and remove others..
+# Converts some attributes and remove others..
 KEYS_STRING = [
     "CONDITIONS_LUMINEUSES",
     "COMMUNE",
@@ -84,7 +83,8 @@ def arrange(rows):
             datetimeAccident = datetimeAccident + " 00:00:00"
         accident["DATE_"] = datetimeAccident
 
-reader = csv.DictReader(reencode(open('./CSV_OTC_ACCIDENTS/OTC_ACCIDENTS.csv', 'rb')), delimiter=";")
+convertfile()
+reader = csv.DictReader(open('./accidents.json', 'rb'), delimiter=";")
 rows = list(reader)
 arrange(rows)
 rows.sort(key=lambda x: datetime.datetime.strptime(x['DATE_'], '%Y-%m-%d %H:%M:%S'))
