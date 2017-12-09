@@ -12,6 +12,7 @@ $(document).ready(function () {
   var access = "pk.eyJ1IjoibWF4aW1lYnVycmkiLCJhIjoiY2phZmUzeTBpMjRiNTJ3cTgxeWZkdGdydyJ9.m7Oycp5uo2-49hUmBVcXFg";
 
   var btnPlay = $("#btnPlay");
+  var btnStop = $("#btnStop");
   var inputDateBegin = $("#inputDateBegin");
   var inputDateEnd = $("#inputDateEnd");
   var slider = $("#slider");
@@ -26,6 +27,16 @@ $(document).ready(function () {
   var TIME_CALCULATION = 10; // Millisecond, time to calculate
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
   var playStatus=false;
+
+  // On stop click
+  btnStop.click(function () {
+    circles.clearLayers(); // reset circles layer
+
+    // Clear interval
+    clearInterval(timer);
+    currentTime = 0;
+    slider.val(0);
+  });
 
   // On play click
   // TODO: Animations, removes circle when replay
