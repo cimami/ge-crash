@@ -25,6 +25,7 @@ $(document).ready(function () {
   var TIME_FRAME = 10; // Millisecond
   var TIME_CALCULATION = 10; // Millisecond, time to calculate
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
+  var playStatus=false;
 
   // On play click
   // TODO: Animations, removes circle when replay
@@ -36,6 +37,16 @@ $(document).ready(function () {
 
     var accidentsBetweenTime = accidents.filter(a => (a.DATE_ > dateBegin && a.DATE_ < dateEnd));
     var accidentsNotDrawn = accidentsBetweenTime.slice(); // Copy
+
+    //Play/Pause
+    var btnPlay = document.getElementById("btnPlay");
+    if (playStatus) {
+      document.getElementById("iBtn").className='fa fa-play';
+      playStatus=false;
+    } else {
+      document.getElementById("iBtn").className='fa fa-pause';
+      playStatus=true;
+    }
 
     // Clear interval
     clearInterval(timer);
