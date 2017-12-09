@@ -39,12 +39,13 @@ $(document).ready(function () {
     var accidentsNotDrawn = accidentsBetweenTime.slice(); // Copy
 
     //Play/Pause
-    var btnPlay = document.getElementById("btnPlay");
     if (playStatus) {
       document.getElementById("iBtn").className='fa fa-play';
+      document.getElementById("btnPlay").className='btn btn-primary play';
       playStatus=false;
     } else {
       document.getElementById("iBtn").className='fa fa-pause';
+      document.getElementById("btnPlay").className='btn btn-secondary pause';
       playStatus=true;
     }
 
