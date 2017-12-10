@@ -27,6 +27,7 @@ $(document).ready(function () {
   var TIME_CALCULATION = 10; // Millisecond, time to calculate
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
   var playStatus=false;
+  var currentPosAccident = 0;
 
   // On stop click
   btnStop.click(function () {
@@ -47,7 +48,7 @@ $(document).ready(function () {
     var timeExtend = dateEnd.getTime() - dateBegin.getTime();
 
     var accidentsBetweenTime = accidents.filter(a => (a.DATE_ > dateBegin && a.DATE_ < dateEnd));
-    var accidentsNotDrawn = accidentsBetweenTime.slice(); // Copy
+    currentPosAccident = 0;
 
     //Play/Pause
     if (playStatus) {
@@ -85,8 +86,8 @@ $(document).ready(function () {
         currentDateElement.html(currentDate.toLocaleString());
 
         // Draw accidents who respect dates
-        for (var i in accidentsNotDrawn) {
-          var accident = accidentsNotDrawn[i];
+        for (currentPosAccident; currentPosAccident < accidentsBetweenTime.length; currentPosAccident++){
+          var accident = accidentsBetweenTime[currentPosAccident];
 
           // If we need to draw accident
           if (accident.DATE_ < currentDate) {
@@ -127,12 +128,9 @@ $(document).ready(function () {
               }, 300, function () {
                 $(this).remove();
               });
-
-
           }
-          // Remove accidents from accidents not drawn
+          // Exit loop
           else{
-            accidentsNotDrawn = accidentsNotDrawn.slice(i, accidentsNotDrawn.length);
             break;
           }
         }
