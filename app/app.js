@@ -13,6 +13,7 @@ $(document).ready(function () {
 
   var btnPlay = $("#btnPlay");
   var btnStop = $("#btnStop");
+  var btnPause = $("#btnPause");
   var inputDateBegin = $("#inputDateBegin");
   var inputDateEnd = $("#inputDateEnd");
   var slider = $("#slider");
@@ -21,13 +22,23 @@ $(document).ready(function () {
   var accidents = [];
 
   var timer;
-  var currentTime; // Current time in ms
+  var currentTime = 0; // Current time in ms
   var TIME_BEGIN_TO_END = 10000; // Milliseconds
   var TIME_FRAME = 10; // Millisecond
   var TIME_CALCULATION = 10; // Millisecond, time to calculate
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
-  var playStatus=false;
+  var playStatus = false;
   var currentPosAccident = 0;
+  var setPlayStatus = function(status){
+    playStatus = status;
+    if(playStatus){
+      btnPlay.hide();
+      btnPause.show();
+    } else{
+      btnPlay.show();
+      btnPause.hide();
+    }
+  };
 
   // On stop click
   btnStop.click(function () {
@@ -37,34 +48,33 @@ $(document).ready(function () {
     clearInterval(timer);
     currentTime = 0;
     slider.val(0);
+
+    // Restart at position
+    currentPosAccident = 0;
+
+    setPlayStatus(false);
   });
 
+  // On pause click
+  btnPause.click(function(){
+    setPlayStatus(false);
+    clearInterval(timer);
+  });
+  
   // On play click
   // TODO: Animations, removes circle when replay
   btnPlay.click(function () {
-    circles.clearLayers(); // reset circles layer
     var dateBegin = new Date(inputDateBegin.val());
     var dateEnd = new Date(inputDateEnd.val());
     var timeExtend = dateEnd.getTime() - dateBegin.getTime();
 
     var accidentsBetweenTime = accidents.filter(a => (a.DATE_ > dateBegin && a.DATE_ < dateEnd));
-    currentPosAccident = 0;
 
-    //Play/Pause
-    if (playStatus) {
-      document.getElementById("iBtn").className='fa fa-play';
-      document.getElementById("btnPlay").className='btn btn-primary play';
-      playStatus=false;
-    } else {
-      document.getElementById("iBtn").className='fa fa-pause';
-      document.getElementById("btnPlay").className='btn btn-secondary pause';
-      playStatus=true;
-    }
+    //Play
+    setPlayStatus(true);
 
     // Clear interval
     clearInterval(timer);
-    currentTime = 0;
-    slider.val(0);
 
     // Each time frame
     timer = setInterval(function () {
