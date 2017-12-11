@@ -56,6 +56,11 @@ $(document).ready(function () {
     currentPosAccident = 0;
 
     setPlayStatus(false);
+
+    // Rest count
+    injuredsCount.text(0);
+    heavyInjuredCount.text(0);
+    deathsCount.text(0);
   });
 
   // On pause click
