@@ -12,6 +12,8 @@ $(document).ready(function () {
   var access = "pk.eyJ1IjoibWF4aW1lYnVycmkiLCJhIjoiY2phZmUzeTBpMjRiNTJ3cTgxeWZkdGdydyJ9.m7Oycp5uo2-49hUmBVcXFg";
 
   var btnPlay = $("#btnPlay");
+  var btnStop = $("#btnStop");
+  var btnPause = $("#btnPause");
   var inputDateBegin = $("#inputDateBegin");
   var inputDateEnd = $("#inputDateEnd");
   var slider = $("#slider");
@@ -23,27 +25,59 @@ $(document).ready(function () {
   var accidents = [];
 
   var timer;
-  var currentTime; // Current time in ms
+  var currentTime = 0; // Current time in ms
   var TIME_BEGIN_TO_END = 10000; // Milliseconds
   var TIME_FRAME = 10; // Millisecond
   var TIME_CALCULATION = 10; // Millisecond, time to calculate
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
+  var playStatus = false;
+  var currentPosAccident = 0;
+  var setPlayStatus = function(status){
+    playStatus = status;
+    if(playStatus){
+      btnPlay.hide();
+      btnPause.show();
+    } else{
+      btnPlay.show();
+      btnPause.hide();
+    }
+  };
 
-  // On play click
-  // TODO: Animations, removes circle when replay
-  btnPlay.click(function () {
+  // On stop click
+  btnStop.click(function () {
     circles.clearLayers(); // reset circles layer
-    var dateBegin = new Date(inputDateBegin.val());
-    var dateEnd = new Date(inputDateEnd.val());
-    var timeExtend = dateEnd.getTime() - dateBegin.getTime();
-
-    var accidentsBetweenTime = accidents.filter(a => (a.DATE_ > dateBegin && a.DATE_ < dateEnd));
-    var accidentsNotDrawn = accidentsBetweenTime.slice(); // Copy
 
     // Clear interval
     clearInterval(timer);
     currentTime = 0;
     slider.val(0);
+
+    // Restart at position
+    currentPosAccident = 0;
+
+    setPlayStatus(false);
+  });
+
+  // On pause click
+  btnPause.click(function(){
+    setPlayStatus(false);
+    clearInterval(timer);
+  });
+  
+  // On play click
+  // TODO: Animations, removes circle when replay
+  btnPlay.click(function () {
+    var dateBegin = new Date(inputDateBegin.val());
+    var dateEnd = new Date(inputDateEnd.val());
+    var timeExtend = dateEnd.getTime() - dateBegin.getTime();
+
+    var accidentsBetweenTime = accidents.filter(a => (a.DATE_ > dateBegin && a.DATE_ < dateEnd));
+
+    //Play
+    setPlayStatus(true);
+
+    // Clear interval
+    clearInterval(timer);
 
     // Each time frame
     timer = setInterval(function () {
@@ -65,8 +99,8 @@ $(document).ready(function () {
         currentDateElement.html(currentDate.toLocaleString());
 
         // Draw accidents who respect dates
-        for (var i in accidentsNotDrawn) {
-          var accident = accidentsNotDrawn[i];
+        for (currentPosAccident; currentPosAccident < accidentsBetweenTime.length; currentPosAccident++){
+          var accident = accidentsBetweenTime[currentPosAccident];
 
           // If we need to draw accident
           if (accident.DATE_ < currentDate) {
@@ -119,12 +153,9 @@ $(document).ready(function () {
               }, 300, function () {
                 $(this).remove();
               });
-
-
           }
-          // Remove accidents from accidents not drawn
+          // Exit loop
           else{
-            accidentsNotDrawn = accidentsNotDrawn.slice(i, accidentsNotDrawn.length);
             break;
           }
         }
