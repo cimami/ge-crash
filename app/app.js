@@ -17,6 +17,9 @@ $(document).ready(function () {
   var slider = $("#slider");
   var currentDateElement = $("#currentDateElement");
   var circlesContainer = $("#circlesContainer");
+  var deathsCount = $("#deathsCount");
+  var injuredsCount = $("#injuredsCount");
+  var heavyInjuredCount = $("#heavyInjuredCount");
   var accidents = [];
 
   var timer;
@@ -80,9 +83,21 @@ $(document).ready(function () {
                 "Cause:" + accident.CAUSE + "<br>" +
                 "Conséquences:" + accident.CONSEQUENCES + "<br>" +
                 "Blessés légers:" + accident.NB_BLESSES_LEGERS + "<br>" +
-                "Blessés graves:" + accident.NB_BLESSES_GRAVES)
+                "Blessés graves:" + accident.NB_BLESSES_GRAVES + "<br>" + 
+                "Morts:" + accident.NB_TUES)
               .addTo(circles);
+            
+            // if(accidents.NB_BLESSES_LEGERS > 0) {
+            //   injuredsCount.text(function(i, current) {return +current+accident.NB_BLESSES_LEGERS});
+            // }
 
+            if(accidents.NB_BLESSES_GRAVES > 0) {
+              heavyInjuredCount.text(function(i, current) {return +current+accident.NB_BLESSES_GRAVES});
+            }
+
+            if(accident.NB_TUES > 0) {
+              deathsCount.text(function(i, current) {return +current+accident.NB_TUES});
+            }
             // Get position real of lattitude and longitude
             var posCircleAnimation = map.layerPointToContainerPoint(
               map.latLngToLayerPoint(L.latLng(latLng))
