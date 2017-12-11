@@ -121,11 +121,11 @@ $(document).ready(function () {
                 "Morts:" + accident.NB_TUES)
               .addTo(circles);
             
-            // if(accidents.NB_BLESSES_LEGERS > 0) {
-            //   injuredsCount.text(function(i, current) {return +current+accident.NB_BLESSES_LEGERS});
-            // }
+            if(accident.NB_BLESSES_LEGERS > 0) {
+              injuredsCount.text(function(i, current) {return +current+accident.NB_BLESSES_LEGERS});
+            }
 
-            if(accidents.NB_BLESSES_GRAVES > 0) {
+            if(accident.NB_BLESSES_GRAVES > 0) {
               heavyInjuredCount.text(function(i, current) {return +current+accident.NB_BLESSES_GRAVES});
             }
 
