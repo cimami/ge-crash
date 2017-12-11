@@ -35,6 +35,8 @@ $(document).ready(function () {
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
   var playStatus = false;
   var currentPosAccident = 0;
+
+  // Set status play (hide and show button)
   var setPlayStatus = function(status){
     playStatus = status;
     if(playStatus){
@@ -45,10 +47,12 @@ $(document).ready(function () {
       btnPause.hide();
     }
   };
+
+  // Add nb icon to div
   var addIconsTo = function(div, classIcon, nb){
     for(var i = 0; i<nb;i++)
       div.append("<i class='fa fa-"+classIcon+"'></i>");
-  } 
+  }
 
   // On stop click
   btnStop.click(function () {
@@ -64,10 +68,15 @@ $(document).ready(function () {
 
     setPlayStatus(false);
 
-    // Rest count
+    // Reset count
     injuredsCount.text(0);
     heavyInjuredCount.text(0);
     deathsCount.text(0);
+
+    // Reset icons
+    injuredIcons.empty();
+    heavyInjuredIcons.empty();
+    deathsIcons.empty();
   });
 
   // On pause click
