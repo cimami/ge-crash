@@ -22,6 +22,9 @@ $(document).ready(function () {
   var deathsCount = $("#deathsCount");
   var injuredsCount = $("#injuredsCount");
   var heavyInjuredCount = $("#heavyInjuredCount");
+  var injuredIcons = $("#injuredsIcons");
+  var heavyInjuredIcons = $("#heavyInjuredsIcons");
+  var deathsIcons = $("#deathsIcons");
   var accidents = [];
 
   var timer;
@@ -42,6 +45,10 @@ $(document).ready(function () {
       btnPause.hide();
     }
   };
+  var addIconsTo = function(div, classIcon, nb){
+    for(var i = 0; i<nb;i++)
+      div.append("<i class='fa fa-"+classIcon+"'></i>");
+  } 
 
   // On stop click
   btnStop.click(function () {
@@ -128,14 +135,17 @@ $(document).ready(function () {
             
             if(accident.NB_BLESSES_LEGERS > 0) {
               injuredsCount.text(function(i, current) {return +current+accident.NB_BLESSES_LEGERS});
+              addIconsTo(injuredIcons, "male", accident.NB_BLESSES_LEGERS);
             }
 
             if(accident.NB_BLESSES_GRAVES > 0) {
               heavyInjuredCount.text(function(i, current) {return +current+accident.NB_BLESSES_GRAVES});
+              addIconsTo(heavyInjuredIcons, "male", accident.NB_BLESSES_GRAVES);
             }
 
             if(accident.NB_TUES > 0) {
               deathsCount.text(function(i, current) {return +current+accident.NB_TUES});
+              addIconsTo(deathsIcons, "male", accident.NB_TUES);
             }
             // Get position real of lattitude and longitude
             var posCircleAnimation = map.layerPointToContainerPoint(
