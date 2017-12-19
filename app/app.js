@@ -48,10 +48,23 @@ $(document).ready(function () {
     }
   };
 
-  // Add nb icon to div
-  var addIconsTo = function(div, classIcon, nb){
-    for(var i = 0; i<nb;i++)
-      div.append("<i class='fa fa-"+classIcon+"'></i>");
+  // Add nb icon to divContainer
+  var addIconsTo = function(divContainer, classIcon, nb, group){
+ 
+    for(let i = 0; i<nb;i++){
+      newDiv = $("<i class='fa fa-"+classIcon+" "+group+"'></i>");
+      divContainer.append(newDiv);
+      newDiv.on("mouseenter", function(){
+        $("."+group).each(function(el) {
+          $(this).css('color', 'red');
+        });
+      });
+      newDiv.on("mouseleave", function(){
+        $("."+group).each(function(el) {
+          $(this).css('color', 'black');
+        });
+      });
+    }
   }
 
   // On stop click
@@ -142,19 +155,20 @@ $(document).ready(function () {
                 "Morts:" + accident.NB_TUES)
               .addTo(circles);
             
+            let group = "id_"+accident.ID_ACCIDENT;
             if(accident.NB_BLESSES_LEGERS > 0) {
               injuredsCount.text(function(i, current) {return +current+accident.NB_BLESSES_LEGERS});
-              addIconsTo(injuredIcons, "male", accident.NB_BLESSES_LEGERS);
+              addIconsTo(injuredIcons, "male", accident.NB_BLESSES_LEGERS, group);
             }
 
             if(accident.NB_BLESSES_GRAVES > 0) {
               heavyInjuredCount.text(function(i, current) {return +current+accident.NB_BLESSES_GRAVES});
-              addIconsTo(heavyInjuredIcons, "male", accident.NB_BLESSES_GRAVES);
+              addIconsTo(heavyInjuredIcons, "male", accident.NB_BLESSES_GRAVES, group);
             }
 
             if(accident.NB_TUES > 0) {
               deathsCount.text(function(i, current) {return +current+accident.NB_TUES});
-              addIconsTo(deathsIcons, "male", accident.NB_TUES);
+              addIconsTo(deathsIcons, "male", accident.NB_TUES, group);
             }
             // Get position real of lattitude and longitude
             var posCircleAnimation = map.layerPointToContainerPoint(
