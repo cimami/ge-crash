@@ -49,20 +49,26 @@ $(document).ready(function () {
   };
 
   // Add nb icon to divContainer
-  var addIconsTo = function(divContainer, classIcon, nb, group){
- 
+  var addIconsTo = function(divContainer, classIcon, nb, group, circle){
+    var keepOpen = false;
     for(let i = 0; i<nb;i++){
       newDiv = $("<i class='fa fa-"+classIcon+" "+group+"'></i>");
       divContainer.append(newDiv);
       newDiv.on("mouseenter", function(){
         $("."+group).each(function(el) {
           $(this).css('color', 'red');
+          circle.openPopup();
         });
       });
       newDiv.on("mouseleave", function(){
         $("."+group).each(function(el) {
           $(this).css('color', 'black');
+          if(!keepOpen)
+            circle.closePopup();
         });
+      });
+      newDiv.on("click", function(){
+        keepOpen = true;
       });
     }
   }
@@ -158,17 +164,17 @@ $(document).ready(function () {
             let group = "id_"+accident.ID_ACCIDENT;
             if(accident.NB_BLESSES_LEGERS > 0) {
               injuredsCount.text(function(i, current) {return +current+accident.NB_BLESSES_LEGERS});
-              addIconsTo(injuredIcons, "male", accident.NB_BLESSES_LEGERS, group);
+              addIconsTo(injuredIcons, "male", accident.NB_BLESSES_LEGERS, group, circle);
             }
 
             if(accident.NB_BLESSES_GRAVES > 0) {
               heavyInjuredCount.text(function(i, current) {return +current+accident.NB_BLESSES_GRAVES});
-              addIconsTo(heavyInjuredIcons, "male", accident.NB_BLESSES_GRAVES, group);
+              addIconsTo(heavyInjuredIcons, "male", accident.NB_BLESSES_GRAVES, group, circle);
             }
 
             if(accident.NB_TUES > 0) {
               deathsCount.text(function(i, current) {return +current+accident.NB_TUES});
-              addIconsTo(deathsIcons, "male", accident.NB_TUES, group);
+              addIconsTo(deathsIcons, "male", accident.NB_TUES, group, circle);
             }
             // Get position real of lattitude and longitude
             var posCircleAnimation = map.layerPointToContainerPoint(
