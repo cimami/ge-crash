@@ -52,7 +52,11 @@ $(document).ready(function () {
   var addIconsTo = function(divContainer, classIcon, nb, group, circle){
     var keepOpen = false;
     for(let i = 0; i<nb;i++){
-      newDiv = $("<i class='fa fa-"+classIcon+" "+group+"'></i>");
+      style = "";
+      if(i == nb-1)
+        style = "margin-right:6px;";
+
+      newDiv = $("<i class='fa fa-"+classIcon+" "+group+"' style='"+style+"'></i>");
       divContainer.append(newDiv);
       newDiv.on("mouseenter", function(){
         $("."+group).each(function(el) {
