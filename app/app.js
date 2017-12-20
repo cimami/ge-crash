@@ -1,15 +1,15 @@
 $(document).ready(function () {
 
-  var circles = L.layerGroup();
-
   // Create the map
   var options = {
     attributionControl: false,
     zoomControl: false,
-    layers: [circles]
-  }
+    maxZoom : 18
+  };
   var map = L.map('mapCrash', options).setView([46.2202289, 6.158851], 10);
   var access = "pk.eyJ1IjoibWF4aW1lYnVycmkiLCJhIjoiY2phZmUzeTBpMjRiNTJ3cTgxeWZkdGdydyJ9.m7Oycp5uo2-49hUmBVcXFg";
+  var marker = L.markerClusterGroup(); // For clustering marker
+  map.addLayer(marker);
 
   var btnPlay = $("#btnPlay");
   var btnStop = $("#btnStop");
@@ -49,7 +49,7 @@ $(document).ready(function () {
   };
 
   // Add nb icon to divContainer
-  var addIconsTo = function(divContainer, classIcon, nb, group, circle){
+  var addIconsTo = function(divContainer, classIcon, nb, group, marker){
     var keepOpen = false;
     for(let i = 0; i<nb;i++){
       style = "";
@@ -61,14 +61,14 @@ $(document).ready(function () {
       newDiv.on("mouseenter", function(){
         $("."+group).each(function(el) {
           $(this).css('color', 'red');
-          circle.openPopup();
+          marker.openPopup();
         });
       });
       newDiv.on("mouseleave", function(){
         $("."+group).each(function(el) {
           $(this).css('color', 'black');
           if(!keepOpen)
-            circle.closePopup();
+            marker.closePopup();
         });
       });
       newDiv.on("click", function(){
@@ -79,7 +79,7 @@ $(document).ready(function () {
 
   // On stop click
   btnStop.click(function () {
-    circles.clearLayers(); // reset circles layer
+    marker.clearLayers(); // reset marker layer
 
     // Clear interval
     clearInterval(timer);
@@ -148,10 +148,11 @@ $(document).ready(function () {
 
           // If we need to draw accident
           if (accident.DATE_ < currentDate) {
-            // Draw Circle
+            // Draw Marker
             var latLng = L.latLng(accident.LAT, accident.LNG);
-
-            var circle = L.circle(latLng, {
+            
+          
+            var marker = L.marker(latLng, {
               fillColor: '#d10000',
               color: '#d10000',
               fillOpacity: 0.1,
@@ -163,8 +164,8 @@ $(document).ready(function () {
                 "Blessés légers:" + accident.NB_BLESSES_LEGERS + "<br>" +
                 "Blessés graves:" + accident.NB_BLESSES_GRAVES + "<br>" + 
                 "Morts:" + accident.NB_TUES)
-              .addTo(circles);
-            
+              .addTo(marker);
+
             let group = "id_"+accident.ID_ACCIDENT;
             if(accident.NB_BLESSES_LEGERS > 0) {
               injuredsCount.text(function(i, current) {return +current+accident.NB_BLESSES_LEGERS});
