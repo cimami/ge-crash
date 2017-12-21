@@ -32,11 +32,12 @@ html, body {
 
 .right-info {
     float:right;
-    width:500px;
+    width:600px;
     padding: 10px;
     height:calc(100% - 56px);
     border-top: 1px solid black;
     background: linear-gradient(to bottom, #232323 2px,#343a40 11px,#41464c 33%);
+    overflow: scroll;
 }
 
 .table-count td{
