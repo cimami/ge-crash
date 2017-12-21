@@ -95,7 +95,7 @@ $(document).ready(function () {
 
       // Color each class
       $("."+group).each(function(el) {
-        $(this).css('color', 'black');
+        $(this).css('color', 'white');
       });
     });
 
@@ -262,16 +262,8 @@ $(document).ready(function () {
     // Foreach
     $.each(data, function (key, val) {
       val.DATE_ = new Date(val.DATE_);
-
-      // Example : add to a list
-      items.push("<li id='" + key + "'>" + val.ID_ACCIDENT + " " + val.CAUSE + "</li>");
     });
 
     accidents = data;
-
-    $("<ul/>", {
-      "class": "my-new-list",
-      html: items.join("")
-    }).appendTo("body");
   });
 });

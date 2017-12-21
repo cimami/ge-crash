@@ -4,8 +4,8 @@
 <head>
   <title>GE Crash</title>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
     crossorigin="" />
 
@@ -23,57 +23,114 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/locale/fr-ch.js"></script>
 
   <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.2.0/dist/MarkerCluster.css" />
-  <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.2.0/dist/MarkerCluster.Default.css" />
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.2.0/dist/MarkerCluster.Default.css"
+  />
   <script type='text/javascript' src='https://unpkg.com/leaflet.markercluster@1.2.0/dist/leaflet.markercluster.js'></script>
 </head>
 
 <body>
-  <div class="jumbotron text-center">
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#">GE Crash</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <i class="nav-link disabled">Accidents à genève</i>
+      <ul class="navbar-nav mr-auto">
+        <!-- Nav bar in future -->
+      </ul>
+      <form class="form-inline mt-2 mt-md-0">
+        <!-- Input if necessary-->
+        <!--<i class="nav-link disabled">Michaël POLLA, Maxime BURRI & Salvatore Cicciù</i>-->
+      </form>
+    </div>
+  </nav>
+
+  <!--<div class="jumbotron text-center">
     <h1>GE Crash</h1>
     <p>Analyse des accidents de la route à Genève</p>
-  </div>
+  </div>-->
 
-  <div class="container" style="margin-bottom:40px;">
-    <div class="row">
-      <div class="col-md-6">
-        <h3>Map</h3>
-        <div id="mapCrash" style="height:500px;width:auto;">
-          <div id="circlesContainer"></div>
-        </div>
-        <div style="margin:4px;width:100%;">
-          <div>
-            <button type="button" id="btnPlay" class="btn btn-primary play">
-              <i class="fa fa-play"></i>
-            </button>
-            <button type="button" id="btnPause" class="btn btn-secondary pause" style="display:none;">
-              <i class="fa fa-pause"></i>
-            </button>
-            <button type="button" id="btnStop" class="btn btn-primary stop">
-                <i class="fa fa-stop"></i>
-            </button>
-            <input type="date" name="begin" id="inputDateBegin" value="2016-01-01" class="form-control">
-            <input type="date" name="end" id="inputDateEnd" value="2016-12-31" class="form-control">
-          </div>
-          <div style="width:100%;">
-            <input id="slider" disabled style="width:100%;" type="range" min="0" max="100000" value="0" step="1" />
-            <span id="currentDateElement"></span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <h3>Info</h3>
-        <p>Blessés légers : <span id="injuredsCount">0</span>
+  <div class="right-info bg-dark text-white">
+    <div class="card-block">
+      <h3>Info</h3>
+      <table class="table-count">
+        <tr>
+          <th style="width:50%;">Blessés légers</th>
+          <th style="width:40%;">Blessés graves</th>
+          <th style="width:10%;">Morts</th>
+        </tr>
+        <tr>
+          <td>
+            <span id="injuredsCount">0</span>
+          </td>
+          <td>
+            <span id="heavyInjuredCount">0</span>
+          </td>
+          <td>
+            <span id="deathsCount">0</span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+              <div id="injuredsIcons"></div>
+          </td>
+          <td>
+            <div id="heavyInjuredsIcons"></div>
+          </td>
+          <td>
+            <div id="deathsIcons"></div>
+          </td>
+        </tr>
+      </table>
+      <!--<p style="width:30%;">
+          <span id="injuredsCount">0</span>
           <div id="injuredsIcons"></div>
-        </p>
-        <p>Blessés graves : <span id="heavyInjuredCount">0</span>
+        </p style="width:30%;">
+        <p>
+          <span id="heavyInjuredCount">0</span>
           <div id="heavyInjuredsIcons"></div>
         </p>
-        <p>Morts : <span id="deathsCount">0</span>
+        <p style="width:30%;">
+          <span id="deathsCount">0</span>
           <div id="deathsIcons"></div>
-        </p>
+        </p>-->
+    </div>
+  </div>
+
+  <div id="mapCrash">
+    <div id="circlesContainer"></div>
+  </div>
+
+
+  <div class="card player">
+    <div class="card-block">
+      <div style="margin:4px;">
+        <div>
+          <button type="button" id="btnPlay" class="btn btn-primary play">
+            <i class="fa fa-play"></i>
+          </button>
+          <button type="button" id="btnPause" class="btn btn-secondary pause" style="display:none;">
+            <i class="fa fa-pause"></i>
+          </button>
+          <button type="button" id="btnStop" class="btn btn-primary stop">
+            <i class="fa fa-stop"></i>
+          </button>
+          <input type="date" name="begin" id="inputDateBegin" value="2016-01-01" class="form-control">
+          <input type="date" name="end" id="inputDateEnd" value="2016-12-31" class="form-control">
+        </div>
+        <div style="width:100%;">
+          <input id="slider" disabled style="width:100%;" type="range" min="0" max="100000" value="0" step="1" />
+          <span id="currentDateElement"></span>
+        </div>
       </div>
     </div>
   </div>
+
+
+
 
 
   <!-- Bootstrap core JavaScript
