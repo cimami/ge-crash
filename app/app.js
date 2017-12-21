@@ -90,7 +90,6 @@ $(document).ready(function () {
       if(!keepOpen){
         marker.closePopup();
         if(bounds){
-          console.log("Mouseleave")
           map.fitBounds(bounds);
         }
       }
