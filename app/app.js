@@ -48,33 +48,70 @@ $(document).ready(function () {
     }
   };
 
+  // Save bound to restore when mouse leave
+  var bounds = undefined;
+
   // Add nb icon to divContainer
   var addIconsTo = function(divContainer, classIcon, nb, group, marker){
+    // Keep open or not when click
     var keepOpen = false;
-    for(let i = 0; i<nb;i++){
-      style = "";
-      if(i == nb-1)
-        style = "margin-right:6px;";
 
-      newDiv = $("<i class='fa fa-"+classIcon+" "+group+"' style='"+style+"'></i>");
-      divContainer.append(newDiv);
-      newDiv.on("mouseenter", function(){
-        $("."+group).each(function(el) {
-          $(this).css('color', 'red');
-          marker.openPopup();
+    var spanAccident = $("<span class='"+group+"' style='margin-right:6px;'></i>");
+
+    // On mouse enter : open popup
+    spanAccident.on("mouseenter", function(){  
+        if(!bounds) 
+          bounds = map.getBounds();
+
+        // Open popup
+        //
+        //map.panTo(marker.getLatLng(), {animate: true, duration: 5.0});
+        map.once('moveend', function() {
+          console.log("moveend");
+          // Timeout to zoomToShowLayer else : recursive infinte call of event...
+          setTimeout(function(){
+            markers.zoomToShowLayer(marker, function(){
+              marker.openPopup();
+            });
+          }, 0);
         });
+        map.flyTo(marker.getLatLng(), 18, 
+          {animate: true, duration: 1.0}
+        );
+       
+      // Color each calss
+      $("."+group).each(function(el) {
+        $(this).css('color', 'red');
       });
-      newDiv.on("mouseleave", function(){
-        $("."+group).each(function(el) {
-          $(this).css('color', 'black');
-          if(!keepOpen)
-            marker.closePopup();
-        });
+    });
+
+    // On mouse leave : close popup
+    spanAccident.on("mouseleave", function(){
+      if(!keepOpen){
+        marker.closePopup();
+        if(bounds){
+          console.log("Mouseleave")
+          map.fitBounds(bounds);
+        }
+      }
+
+      // Color each class
+      $("."+group).each(function(el) {
+        $(this).css('color', 'black');
       });
-      newDiv.on("click", function(){
-        keepOpen = true;
-      });
+    });
+
+    // Click : keep open
+    spanAccident.on("click", function(){
+      keepOpen = true;
+    });
+    
+    for(let i = 0; i<nb;i++){
+      // Append div
+      newDiv = $("<i class='fa fa-"+classIcon+"'></i>");
+      spanAccident.append(newDiv);
     }
+    divContainer.append(spanAccident);
   }
 
   // On stop click
