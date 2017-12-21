@@ -67,7 +67,6 @@ $(document).ready(function () {
         //
         //map.panTo(marker.getLatLng(), {animate: true, duration: 5.0});
         map.once('moveend', function() {
-          console.log("moveend");
           // Timeout to zoomToShowLayer else : recursive infinte call of event...
           setTimeout(function(){
             markers.zoomToShowLayer(marker, function(){
