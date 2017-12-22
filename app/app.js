@@ -25,6 +25,8 @@ $(document).ready(function () {
   var injuredIcons = $("#injuredsIcons");
   var heavyInjuredIcons = $("#heavyInjuredsIcons");
   var deathsIcons = $("#deathsIcons");
+  var rightInfoPanel = document.getElementById("right-info-panel");
+  var rowIcons = $("#rowIcons");
   var accidents = [];
 
   var timer;
@@ -33,6 +35,7 @@ $(document).ready(function () {
   var TIME_FRAME = 10; // Millisecond
   var TIME_CALCULATION = 10; // Millisecond, time to calculate
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
+  var ICONS_PERSON_FONT_SIZE = parseInt(rowIcons.css("font-size"));
   var playStatus = false;
   var currentPosAccident = 0;
 
@@ -50,6 +53,7 @@ $(document).ready(function () {
 
   // Save bound to restore when mouse leave
   var bounds = undefined;
+  var checkOverflow = true;
 
   // Add nb icon to divContainer
   var addIconsTo = function(divContainer, classIcon, nb, group, marker){
@@ -110,6 +114,21 @@ $(document).ready(function () {
       spanAccident.append(newDiv);
     }
     divContainer.append(spanAccident);
+
+    // Check overlow    
+    if (checkOverflow && (rightInfoPanel.offsetHeight < rightInfoPanel.scrollHeight ||
+      divContainer.offsetWidth < divContainer.scrollWidth)) {
+      checkOverflow = false;
+      var fontSize = parseFloat(rowIcons.css("font-size"));
+      fontSize = (fontSize - 2) + "px";
+
+      // Animate font size
+      $( rowIcons ).animate({
+        fontSize : fontSize
+      }, 2000, function() {
+        checkOverflow = true;
+      });
+    }
   }
 
   // On stop click
@@ -135,6 +154,9 @@ $(document).ready(function () {
     injuredIcons.empty();
     heavyInjuredIcons.empty();
     deathsIcons.empty();
+
+    // Icons person font-size
+    rowIcons.css({'font-size':ICONS_PERSON_FONT_SIZE+'px'});
   });
 
   // On pause click
