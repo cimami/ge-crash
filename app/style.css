@@ -62,6 +62,7 @@ html, body {
     width: 1px;
     height: 1px;
     background: red;
+    opacity: 0.5;
     transform: translate(-50%, -50%);
     border: 1px solid rgb(133, 0, 0);
     z-index: 99999999;
