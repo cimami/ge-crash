@@ -39,13 +39,44 @@ $(document).ready(function () {
   var playStatus = false;
   var currentPosAccident = 0;
 
+
+
+  var data = [3.5, 3, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7, 3.4, 3, 3, 4,
+    4.4, 3.9, 3.5, 3.8, 3.8, 3.4, 3.7, 3.6, 3.3, 3.4, 3, 3.4, 3.5, 3.4, 3.2, 3.1,
+    3.4, 4.1, 4.2, 3.1, 3.2, 3.5, 3.6, 3, 3.4, 3.5, 2.3, 3.2, 3.5, 3.8, 3, 3.8, 3.2,
+    3.7, 3.3, 3.2, 3.2, 3.1, 2.3, 2.8, 2.8, 3.3, 2.4, 2.9, 2.7, 2, 3, 2.2, 2.9,
+    2.9, 3.1, 3, 2.7, 2.2, 2.5, 3.2, 2.8, 2.5, 2.8, 2.9, 3, 2.8, 3, 2.9, 2.6, 2.4,
+    2.4, 2.7, 2.7, 3, 3.4, 3.1, 2.3, 3, 2.5, 2.6, 3, 2.6, 2.3, 2.7, 3, 2.9, 2.9, 2.5, 2.8,
+    3.3, 2.7, 3, 2.9, 3, 3, 2.5, 2.9, 2.5, 3.6, 3.2, 2.7, 3, 2.5, 2.8, 3.2, 3, 3.8, 2.6, 2.2, 3.2,
+    2.8, 2.8, 2.7, 3.3, 3.2, 2.8, 3, 2.8, 3, 2.8, 3.8, 2.8, 2.8, 2.6, 3, 3.4, 3.1, 3, 3.1, 3.1, 3.1,
+    2.7, 3.2, 3.3, 3, 2.5, 3, 3.4, 3];
+
+  $(function () {
+    var myChart = Highcharts.chart('histogram', {
+      title: {
+        text: 'Nombre d\'accident'
+      },
+      xAxis: [{
+        title: { text: 'Data' },
+        alignTicks: false
+      }],
+      yAxis: [{
+        title: { text: 'Data' }
+      }],
+      series: [{
+        type: 'histogram',
+        data: data
+      }]
+    });
+  });
+
   // Set status play (hide and show button)
-  var setPlayStatus = function(status){
+  var setPlayStatus = function (status) {
     playStatus = status;
-    if(playStatus){
+    if (playStatus) {
       btnPlay.hide();
       btnPause.show();
-    } else{
+    } else {
       btnPlay.show();
       btnPause.hide();
     }
@@ -56,61 +87,61 @@ $(document).ready(function () {
   var checkOverflow = true;
 
   // Add nb icon to divContainer
-  var addIconsTo = function(divContainer, classIcon, nb, group, marker){
+  var addIconsTo = function (divContainer, classIcon, nb, group, marker) {
     // Keep open or not when click
     var keepOpen = false;
 
-    var spanAccident = $("<span class='"+group+"' style='margin-right:6px;'></i>");
+    var spanAccident = $("<span class='" + group + "' style='margin-right:6px;'></i>");
 
     // On mouse enter : open popup
-    spanAccident.on("mouseenter", function(){  
-        if(!bounds) 
-          bounds = map.getBounds();
+    spanAccident.on("mouseenter", function () {
+      if (!bounds)
+        bounds = map.getBounds();
 
-        // Open popup
-        //
-        //map.panTo(marker.getLatLng(), {animate: true, duration: 5.0});
-        map.once('moveend', function() {
-          // Timeout to zoomToShowLayer else : recursive infinte call of event...
-          setTimeout(function(){
-            markers.zoomToShowLayer(marker, function(){
-              marker.openPopup();
-            });
-          }, 0);
-        });
-        map.flyTo(marker.getLatLng(), 18, 
-          {animate: true, duration: 1.0}
-        );
-       
+      // Open popup
+      //
+      //map.panTo(marker.getLatLng(), {animate: true, duration: 5.0});
+      map.once('moveend', function () {
+        // Timeout to zoomToShowLayer else : recursive infinte call of event...
+        setTimeout(function () {
+          markers.zoomToShowLayer(marker, function () {
+            marker.openPopup();
+          });
+        }, 0);
+      });
+      map.flyTo(marker.getLatLng(), 18,
+        { animate: true, duration: 1.0 }
+      );
+
       // Color each calss
-      $("."+group).each(function(el) {
+      $("." + group).each(function (el) {
         $(this).css('color', 'red');
       });
     });
 
     // On mouse leave : close popup
-    spanAccident.on("mouseleave", function(){
-      if(!keepOpen){
+    spanAccident.on("mouseleave", function () {
+      if (!keepOpen) {
         marker.closePopup();
-        if(bounds){
+        if (bounds) {
           map.fitBounds(bounds);
         }
       }
 
       // Color each class
-      $("."+group).each(function(el) {
+      $("." + group).each(function (el) {
         $(this).css('color', 'white');
       });
     });
 
     // Click : keep open
-    spanAccident.on("click", function(){
+    spanAccident.on("click", function () {
       keepOpen = true;
     });
-    
-    for(let i = 0; i<nb;i++){
+
+    for (let i = 0; i < nb; i++) {
       // Append div
-      newDiv = $("<i class='fa fa-"+classIcon+"'></i>");
+      newDiv = $("<i class='fa fa-" + classIcon + "'></i>");
       spanAccident.append(newDiv);
     }
     divContainer.append(spanAccident);
@@ -123,9 +154,9 @@ $(document).ready(function () {
       fontSize = (fontSize - 2) + "px";
 
       // Animate font size
-      $( rowIcons ).animate({
-        fontSize : fontSize
-      }, 2000, function() {
+      $(rowIcons).animate({
+        fontSize: fontSize
+      }, 2000, function () {
         checkOverflow = true;
       });
     }
@@ -156,15 +187,15 @@ $(document).ready(function () {
     deathsIcons.empty();
 
     // Icons person font-size
-    rowIcons.css({'font-size':ICONS_PERSON_FONT_SIZE+'px'});
+    rowIcons.css({ 'font-size': ICONS_PERSON_FONT_SIZE + 'px' });
   });
 
   // On pause click
-  btnPause.click(function(){
+  btnPause.click(function () {
     setPlayStatus(false);
     clearInterval(timer);
   });
-  
+
   // On play click
   // TODO: Animations, removes circle when replay
   btnPlay.click(function () {
@@ -200,15 +231,15 @@ $(document).ready(function () {
         currentDateElement.html(currentDate.toLocaleString());
 
         // Draw accidents who respect dates
-        for (currentPosAccident; currentPosAccident < accidentsBetweenTime.length; currentPosAccident++){
+        for (currentPosAccident; currentPosAccident < accidentsBetweenTime.length; currentPosAccident++) {
           var accident = accidentsBetweenTime[currentPosAccident];
 
           // If we need to draw accident
           if (accident.DATE_ < currentDate) {
             // Draw Marker
             var latLng = L.latLng(accident.LAT, accident.LNG);
-            
-          
+
+
             var marker = L.marker(latLng, {
               fillColor: '#d10000',
               color: '#d10000',
@@ -216,26 +247,26 @@ $(document).ready(function () {
               weight: 0.5,
               radius: 5
             }).bindPopup("ID accident:" + accident.ID_ACCIDENT + "<br>" +
-                "Cause:" + accident.CAUSE + "<br>" +
-                "Conséquences:" + accident.CONSEQUENCES + "<br>" +
-                "Blessés légers:" + accident.NB_BLESSES_LEGERS + "<br>" +
-                "Blessés graves:" + accident.NB_BLESSES_GRAVES + "<br>" + 
-                "Morts:" + accident.NB_TUES)
+            "Cause:" + accident.CAUSE + "<br>" +
+            "Conséquences:" + accident.CONSEQUENCES + "<br>" +
+            "Blessés légers:" + accident.NB_BLESSES_LEGERS + "<br>" +
+            "Blessés graves:" + accident.NB_BLESSES_GRAVES + "<br>" +
+            "Morts:" + accident.NB_TUES)
               .addTo(markers);
 
-            let group = "id_"+accident.ID_ACCIDENT;
-            if(accident.NB_BLESSES_LEGERS > 0) {
-              injuredsCount.text(function(i, current) {return +current+accident.NB_BLESSES_LEGERS});
+            let group = "id_" + accident.ID_ACCIDENT;
+            if (accident.NB_BLESSES_LEGERS > 0) {
+              injuredsCount.text(function (i, current) { return +current + accident.NB_BLESSES_LEGERS });
               addIconsTo(injuredIcons, "male", accident.NB_BLESSES_LEGERS, group, marker);
             }
 
-            if(accident.NB_BLESSES_GRAVES > 0) {
-              heavyInjuredCount.text(function(i, current) {return +current+accident.NB_BLESSES_GRAVES});
+            if (accident.NB_BLESSES_GRAVES > 0) {
+              heavyInjuredCount.text(function (i, current) { return +current + accident.NB_BLESSES_GRAVES });
               addIconsTo(heavyInjuredIcons, "male", accident.NB_BLESSES_GRAVES, group, marker);
             }
 
-            if(accident.NB_TUES > 0) {
-              deathsCount.text(function(i, current) {return +current+accident.NB_TUES});
+            if (accident.NB_TUES > 0) {
+              deathsCount.text(function (i, current) { return +current + accident.NB_TUES });
               addIconsTo(deathsIcons, "male", accident.NB_TUES, group, marker);
             }
             // Get position real of lattitude and longitude
@@ -261,7 +292,7 @@ $(document).ready(function () {
               });
           }
           // Exit loop
-          else{
+          else {
             break;
           }
         }
