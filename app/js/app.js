@@ -6,8 +6,19 @@ $(document).ready(function () {
     zoomControl: false,
     maxZoom : 18
   };
-  var map = L.map('mapCrash', options).setView([46.2202289, 6.158851], 10);
-  var access = "pk.eyJ1IjoibWF4aW1lYnVycmkiLCJhIjoiY2phZmUzeTBpMjRiNTJ3cTgxeWZkdGdydyJ9.m7Oycp5uo2-49hUmBVcXFg";
+  var map = L.map('mapCrash', options);
+  
+  // Add mask in other canton than Geneva
+  let polygons = [];
+  // Foreach "Polygons"
+  for(var i = 0; i < boundaries.geometry.coordinates.length; i++){
+    let polygon = geoJsonCoordinateToLatLng(boundaries.geometry.coordinates[i][0]);
+    polygons.push(polygon);
+  }
+  // Mask
+  L.mask(polygons).addTo(map);
+  map.fitBounds([[46.2980, 6.2975],[46.1329, 6.0091]]);
+
   var markers = L.markerClusterGroup(); // For clustering marker
   map.addLayer(markers);
 
@@ -301,7 +312,7 @@ $(document).ready(function () {
   });
 
   // Set tile layer, on future we could create own
-  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + access, {
+  L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
     attribution: "Les Sygnes", //'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 18,
     id: 'mapbox.streets'
