@@ -6,7 +6,7 @@ $(document).ready(function () {
     zoomControl: false,
     maxZoom : 18
   };
-  var map = L.map('mapCrash', options).setView([46.2202289, 6.158851], 10);
+  var map = L.map('mapCrash', options);
   
   // Add mask in other canton than Geneva
   let polygons = [];
@@ -17,6 +17,7 @@ $(document).ready(function () {
   }
   // Mask
   L.mask(polygons).addTo(map);
+  map.fitBounds([[46.2980, 6.2975],[46.1329, 6.0091]]);
 
   var access = "pk.eyJ1IjoibWF4aW1lYnVycmkiLCJhIjoiY2phZmUzeTBpMjRiNTJ3cTgxeWZkdGdydyJ9.m7Oycp5uo2-49hUmBVcXFg";
   var markers = L.markerClusterGroup(); // For clustering marker
