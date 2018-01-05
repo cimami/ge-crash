@@ -7,6 +7,17 @@ $(document).ready(function () {
     maxZoom : 18
   };
   var map = L.map('mapCrash', options).setView([46.2202289, 6.158851], 10);
+  
+  // Add mask in other canton than Geneva
+  let polygons = [];
+  // Foreach "Polygons"
+  for(var i = 0; i < boundaries.geometry.coordinates.length; i++){
+    let polygon = geoJsonCoordinateToLatLng(boundaries.geometry.coordinates[i][0]);
+    polygons.push(polygon);
+  }
+  // Mask
+  L.mask(polygons).addTo(map);
+
   var access = "pk.eyJ1IjoibWF4aW1lYnVycmkiLCJhIjoiY2phZmUzeTBpMjRiNTJ3cTgxeWZkdGdydyJ9.m7Oycp5uo2-49hUmBVcXFg";
   var markers = L.markerClusterGroup(); // For clustering marker
   map.addLayer(markers);
