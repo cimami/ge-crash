@@ -49,35 +49,38 @@ $(document).ready(function () {
   var ICONS_PERSON_FONT_SIZE = parseInt(rowIcons.css("font-size"));
   var playStatus = false;
   var currentPosAccident = 0;
+  var myChart = undefined;
 
-
-
-  var data = [3.5, 3, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7, 3.4, 3, 3, 4,
-    4.4, 3.9, 3.5, 3.8, 3.8, 3.4, 3.7, 3.6, 3.3, 3.4, 3, 3.4, 3.5, 3.4, 3.2, 3.1,
-    3.4, 4.1, 4.2, 3.1, 3.2, 3.5, 3.6, 3, 3.4, 3.5, 2.3, 3.2, 3.5, 3.8, 3, 3.8, 3.2,
-    3.7, 3.3, 3.2, 3.2, 3.1, 2.3, 2.8, 2.8, 3.3, 2.4, 2.9, 2.7, 2, 3, 2.2, 2.9,
-    2.9, 3.1, 3, 2.7, 2.2, 2.5, 3.2, 2.8, 2.5, 2.8, 2.9, 3, 2.8, 3, 2.9, 2.6, 2.4,
-    2.4, 2.7, 2.7, 3, 3.4, 3.1, 2.3, 3, 2.5, 2.6, 3, 2.6, 2.3, 2.7, 3, 2.9, 2.9, 2.5, 2.8,
-    3.3, 2.7, 3, 2.9, 3, 3, 2.5, 2.9, 2.5, 3.6, 3.2, 2.7, 3, 2.5, 2.8, 3.2, 3, 3.8, 2.6, 2.2, 3.2,
-    2.8, 2.8, 2.7, 3.3, 3.2, 2.8, 3, 2.8, 3, 2.8, 3.8, 2.8, 2.8, 2.6, 3, 3.4, 3.1, 3, 3.1, 3.1, 3.1,
-    2.7, 3.2, 3.3, 3, 2.5, 3, 3.4, 3];
 
   $(function () {
-    var myChart = Highcharts.chart('histogram', {
+    myChart = Highcharts.chart('histogram', {
       title: {
-        text: 'Nombre d\'accident'
+        text: ''
       },
-      xAxis: [{
-        title: { text: 'Data' },
-        alignTicks: false
-      }],
-      yAxis: [{
-        title: { text: 'Data' }
-      }],
       series: [{
+        name: "Nombre d'accident",
         type: 'histogram',
-        data: data
-      }]
+        data: [] 
+      }],
+      credits: {
+        enabled: false
+      },
+      chart: {
+        spacingBottom: 0,
+        spacingRight: 3,
+        spacingLeft: 3,
+        marginBottom : 40
+      },
+      yAxis: {
+        labels: {
+          enabled: false
+        },
+        title: {
+          text: null
+        }
+      },
+      xAxis: {
+      }
     });
   });
 
@@ -215,6 +218,34 @@ $(document).ready(function () {
     var timeExtend = dateEnd.getTime() - dateBegin.getTime();
 
     var accidentsBetweenTime = accidents.filter(a => (a.DATE_ > dateBegin && a.DATE_ < dateEnd));
+
+    // Calculate data for histogram
+    var nbBar = 12;
+    var timeSizeBar = timeExtend / nbBar;
+
+    var nbAccidentCurrentBar = 0;
+    var histogramBars = [];
+    var currentBar = 1;
+
+    for(i = 0; i < accidentsBetweenTime.length; i++){
+      if(accidentsBetweenTime[i].DATE_ < new Date(dateBegin.getTime()+(currentBar)*timeSizeBar)){
+        nbAccidentCurrentBar++;
+      }
+      else{
+        while(accidentsBetweenTime[i].DATE_ >= new Date(dateBegin.getTime()+(currentBar)*timeSizeBar)){
+          currentBar++;
+          histogramBars.push(nbAccidentCurrentBar);
+          nbAccidentCurrentBar = 0;
+        }
+        nbAccidentCurrentBar++;
+      }
+    }
+    histogramBars.push(nbAccidentCurrentBar);
+    while(currentBar < nbBar){
+      histogramBars.push(0);
+      currentBar++;
+    }
+    myChart.series[0].setData(histogramBars);
 
     //Play
     setPlayStatus(true);
