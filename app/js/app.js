@@ -60,36 +60,35 @@ $(document).ready(function () {
   var timeExtend;
   var accidentsBetweenTime;
 
-  $(function () {
-    myChart = Highcharts.chart('histogram', {
-      title: {
-        text: ''
-      },
-      series: [{
-        name: "Nombre d'accident",
-        type: 'histogram',
-        data: [] 
-      }],
-      credits: {
+  myChart = Highcharts.chart('histogram', {
+    title: {
+      text: ''
+    },
+    series: [{
+      name: "Nombre d'accident",
+      type: 'histogram',
+      data: [] 
+    }],
+    credits: {
+      enabled: false
+    },
+    chart: {
+      spacingBottom: 0,
+      spacingRight: 3,
+      spacingLeft: 3,
+      marginBottom : 40
+    },
+    yAxis: {
+      labels: {
         enabled: false
       },
-      chart: {
-        spacingBottom: 0,
-        spacingRight: 3,
-        spacingLeft: 3,
-        marginBottom : 40
-      },
-      yAxis: {
-        labels: {
-          enabled: false
-        },
-        title: {
-          text: null
-        }
-      },
-      xAxis: {
+      title: {
+        text: null
       }
-    });
+    },
+    xAxis: {
+      type: 'datetime'
+    }
   });
 
   // Set status play (hide and show button)
@@ -252,7 +251,11 @@ $(document).ready(function () {
       histogramBars.push(0);
       currentBar++;
     }
-    myChart.series[0].setData(histogramBars);
+    myChart.series[0].update( {
+      data : histogramBars,
+      pointStart: Date.UTC(dateBegin.getFullYear(), dateBegin.getMonth(), dateBegin.getDate()),
+      pointInterval: timeSizeBar
+    }, true);
   }
   inputDateBegin.on("change", updateInfoByDateInputs);
   inputDateEnd.on("change", updateInfoByDateInputs);
