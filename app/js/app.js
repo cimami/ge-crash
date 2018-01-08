@@ -5,7 +5,8 @@ $(document).ready(function () {
   var options = {
     attributionControl: false,
     zoomControl: false,
-    maxZoom : 18
+    maxZoom : 18,
+    "scaleRadius": true,
   };
   var map = L.map('mapCrash', options);
   
@@ -53,6 +54,8 @@ $(document).ready(function () {
 
   map.addLayer(markers);
 
+  var heat = L.heatLayer([], {radius: 20}).addTo(map);
+
   var btnPlay = $("#btnPlay");
   var btnStop = $("#btnStop");
   var btnPause = $("#btnPause");
@@ -82,37 +85,41 @@ $(document).ready(function () {
   var currentPosAccident = 0;
   var myChart = undefined;
 
+  // Use for updateInfoByDateInputs()
+  var dateBegin;
+  var dateEnd;
+  var timeExtend;
+  var accidentsBetweenTime;
 
-  $(function () {
-    myChart = Highcharts.chart('histogram', {
-      title: {
-        text: ''
-      },
-      series: [{
-        name: "Nombre d'accident",
-        type: 'histogram',
-        data: [] 
-      }],
-      credits: {
+  myChart = Highcharts.chart('histogram', {
+    title: {
+      text: ''
+    },
+    series: [{
+      name: "Nombre d'accident",
+      type: 'histogram',
+      data: [] 
+    }],
+    credits: {
+      enabled: false
+    },
+    chart: {
+      spacingBottom: 0,
+      spacingRight: 3,
+      spacingLeft: 3,
+      marginBottom : 40
+    },
+    yAxis: {
+      labels: {
         enabled: false
       },
-      chart: {
-        spacingBottom: 0,
-        spacingRight: 3,
-        spacingLeft: 3,
-        marginBottom : 40
-      },
-      yAxis: {
-        labels: {
-          enabled: false
-        },
-        title: {
-          text: null
-        }
-      },
-      xAxis: {
+      title: {
+        text: null
       }
-    });
+    },
+    xAxis: {
+      type: 'datetime'
+    }
   });
 
   // Set status play (hide and show button)
@@ -210,6 +217,7 @@ $(document).ready(function () {
   // On stop click
   btnStop.click(function () {
     markers.clearLayers(); // reset markers layer
+    heat.setLatLngs([]) // reset heat map
 
     // Clear interval
     clearInterval(timer);
@@ -241,14 +249,12 @@ $(document).ready(function () {
     clearInterval(timer);
   });
 
-  // On play click
-  // TODO: Animations, removes circle when replay
-  btnPlay.click(function () {
-    var dateBegin = new Date(inputDateBegin.val());
-    var dateEnd = new Date(inputDateEnd.val());
-    var timeExtend = dateEnd.getTime() - dateBegin.getTime();
+  function updateInfoByDateInputs(){
+    dateBegin = new Date(inputDateBegin.val());
+    dateEnd = new Date(inputDateEnd.val());
+    timeExtend = dateEnd.getTime() - dateBegin.getTime();
 
-    var accidentsBetweenTime = accidents.filter(a => (a.DATE_ > dateBegin && a.DATE_ < dateEnd));
+    accidentsBetweenTime = accidents.filter(a => (a.DATE_ > dateBegin && a.DATE_ < dateEnd));
 
     // Calculate data for histogram
     var nbBar = 12;
@@ -276,7 +282,18 @@ $(document).ready(function () {
       histogramBars.push(0);
       currentBar++;
     }
-    myChart.series[0].setData(histogramBars);
+    myChart.series[0].update( {
+      data : histogramBars,
+      pointStart: Date.UTC(dateBegin.getFullYear(), dateBegin.getMonth(), dateBegin.getDate()),
+      pointInterval: timeSizeBar
+    }, true);
+  }
+  inputDateBegin.on("change", updateInfoByDateInputs);
+  inputDateEnd.on("change", updateInfoByDateInputs);
+
+  // On play click
+  btnPlay.click(function () {
+    updateInfoByDateInputs();
 
     //Play
     setPlayStatus(true);
@@ -363,6 +380,8 @@ $(document).ready(function () {
               }, 300, function () {
                 $(this).remove();
               });
+
+            heat.addLatLng(latLng);
           }
           // Exit loop
           else {
@@ -391,5 +410,8 @@ $(document).ready(function () {
     });
 
     accidents = data;
+
+    // We get accidents : add histogram
+    updateInfoByDateInputs();
   });
 });
