@@ -51,6 +51,11 @@ $(document).ready(function () {
   var currentPosAccident = 0;
   var myChart = undefined;
 
+  // Use for updateInfoByDateInputs()
+  var dateBegin;
+  var dateEnd;
+  var timeExtend;
+  var accidentsBetweenTime;
 
   $(function () {
     myChart = Highcharts.chart('histogram', {
@@ -210,14 +215,12 @@ $(document).ready(function () {
     clearInterval(timer);
   });
 
-  // On play click
-  // TODO: Animations, removes circle when replay
-  btnPlay.click(function () {
-    var dateBegin = new Date(inputDateBegin.val());
-    var dateEnd = new Date(inputDateEnd.val());
-    var timeExtend = dateEnd.getTime() - dateBegin.getTime();
+  function updateInfoByDateInputs(){
+    dateBegin = new Date(inputDateBegin.val());
+    dateEnd = new Date(inputDateEnd.val());
+    timeExtend = dateEnd.getTime() - dateBegin.getTime();
 
-    var accidentsBetweenTime = accidents.filter(a => (a.DATE_ > dateBegin && a.DATE_ < dateEnd));
+    accidentsBetweenTime = accidents.filter(a => (a.DATE_ > dateBegin && a.DATE_ < dateEnd));
 
     // Calculate data for histogram
     var nbBar = 12;
@@ -246,6 +249,13 @@ $(document).ready(function () {
       currentBar++;
     }
     myChart.series[0].setData(histogramBars);
+  }
+  inputDateBegin.on("change", updateInfoByDateInputs);
+  inputDateEnd.on("change", updateInfoByDateInputs);
+
+  // On play click
+  btnPlay.click(function () {
+    updateInfoByDateInputs();
 
     //Play
     setPlayStatus(true);
@@ -360,5 +370,8 @@ $(document).ready(function () {
     });
 
     accidents = data;
+
+    // We get accidents : add histogram
+    updateInfoByDateInputs();
   });
 });
