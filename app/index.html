@@ -32,6 +32,9 @@
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
 
+  <link rel="stylesheet" href="./js/rangeslide.js-master/dist/rangeslide.css">
+  
+  <script src="./js/rangeslide.js-master/dist/rangeslide.js"></script>
 </head>
 
 <body>
@@ -111,12 +114,21 @@
             <input type="date" name="end" id="inputDateEnd" value="2016-12-31" class="form-control">
           </div>
           <div style="width:100%;">
-            <input id="slider" disabled style="width:100%;" type="range" min="0" max="100000" value="0" step="1" />
+            <form>
+              <input name="slider" id="slider" class="slider" style="width:100%;" type="range" min="0" max="100000" value="0" step="1" />
+              <output for="slider"><span id="currentDateElement"></span></output>
+            </form>
+            <!--<div id="barSlider" style="    height: 70px;
+            /* top: -10px; */
+            margin-top: -10px;
+            margin-left: 1px;
+            position: absolute;
+            width: 3px;
+            background: #516792;"></div>-->
           </div>
         </div>
       </div>
       <div id="histogram" style="width:100%; height:100px;margin-top:-10px;"></div>
-      <span id="currentDateElement"></span>
     </div>
   <!-- Bootstrap core JavaScript
     ================================================== -->

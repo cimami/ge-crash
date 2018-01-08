@@ -90,7 +90,7 @@ $(document).ready(function () {
   var dateEnd;
   var timeExtend;
   var accidentsBetweenTime;
-
+  
   myChart = Highcharts.chart('histogram', {
     title: {
       text: ''
@@ -121,6 +121,31 @@ $(document).ready(function () {
       type: 'datetime'
     }
   });
+
+  // Modify offset of position of current date
+  function modifyOffset() {
+    var el, newPoint, newPlace, offset, siblings, k;
+    width    = this.offsetWidth;
+    newPoint = (this.value - this.getAttribute("min")) / (this.getAttribute("max") - this.getAttribute("min"));
+    offset   = -1;
+    if (newPoint < 0) { newPlace = 0;  }
+    else if (newPoint > 1) { newPlace = width; }
+    else { newPlace = width * newPoint + offset; offset -= newPoint;}
+    siblings = this.parentNode.childNodes;
+    for (var i = 0; i < siblings.length; i++) {
+      sibling = siblings[i];
+      if (sibling.id == this.id) { k = true; }
+      if ((k == true) && (sibling.nodeName == "OUTPUT")) {
+        outputTag = sibling;
+      }
+    }
+    outputTag.style.left       = newPlace + "px";
+    outputTag.style.marginLeft = offset + "%";
+    //outputTag.innerHTML        = this.value;
+  }
+  var sliderDOM = document.getElementById("slider");
+  var barDOM = document.getElementById("barSlider");
+  sliderDOM.oninput = modifyOffset;
 
   // Set status play (hide and show button)
   var setPlayStatus = function (status) {
@@ -241,6 +266,9 @@ $(document).ready(function () {
 
     // Icons person font-size
     rowIcons.css({ 'font-size': ICONS_PERSON_FONT_SIZE + 'px' });
+
+    // Clear date
+    currentDateElement.html("");
   });
 
   // On pause click
@@ -306,6 +334,7 @@ $(document).ready(function () {
       currentTime += TIME_FRAME;
       var currentSliderValue = currentTime * SLIDER_MAX_RANGE / TIME_BEGIN_TO_END;
       slider.val(currentSliderValue);
+      modifyOffset.call(sliderDOM);
 
       // Finish ?
       if (currentSliderValue > SLIDER_MAX_RANGE) {
