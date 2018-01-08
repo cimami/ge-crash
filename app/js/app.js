@@ -4,7 +4,8 @@ $(document).ready(function () {
   var options = {
     attributionControl: false,
     zoomControl: false,
-    maxZoom : 18
+    maxZoom : 18,
+    "scaleRadius": true,
   };
   var map = L.map('mapCrash', options);
   
@@ -21,6 +22,8 @@ $(document).ready(function () {
 
   var markers = L.markerClusterGroup(); // For clustering marker
   map.addLayer(markers);
+
+  var heat = L.heatLayer([], {radius: 20}).addTo(map);
 
   var btnPlay = $("#btnPlay");
   var btnStop = $("#btnStop");
@@ -184,6 +187,7 @@ $(document).ready(function () {
   // On stop click
   btnStop.click(function () {
     markers.clearLayers(); // reset markers layer
+    heat.setLatLngs([]) // reset heat map
 
     // Clear interval
     clearInterval(timer);
@@ -342,6 +346,8 @@ $(document).ready(function () {
               }, 300, function () {
                 $(this).remove();
               });
+
+            heat.addLatLng(latLng);
           }
           // Exit loop
           else {
