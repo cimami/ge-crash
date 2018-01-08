@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  var nbMarkerClusterMax = 0;
 
   // Create the map
   var options = {
@@ -19,7 +20,37 @@ $(document).ready(function () {
   L.mask(polygons).addTo(map);
   map.fitBounds([[46.2980, 6.2975],[46.1329, 6.0091]]);
 
-  var markers = L.markerClusterGroup(); // For clustering marker
+  //var markers = L.markerClusterGroup(); // For clustering marker
+  var markers = L.markerClusterGroup({
+    iconCreateFunction: function (cluster) {
+      var nbAccident = cluster.getChildCount();
+      var className ='mycluster1';
+      var size = 40;
+      
+      if(nbAccident>nbMarkerClusterMax)
+        nbMarkerClusterMax=nbAccident
+
+      if(nbAccident <(0.33*nbMarkerClusterMax)){
+        className ='clusterGreen';
+        size=40;
+      }else if(nbAccident >=(0.33*nbMarkerClusterMax) && nbAccident< (0.66*nbMarkerClusterMax)){
+        className ='clusterYellow';
+        size=50;
+      }else{
+        className ='clusterRed';
+        size=60;
+      }
+      
+      return L.divIcon({ html: "<span>"+nbAccident+"</span>", className: className, iconSize: L.point(size, size) });
+    }
+  });
+
+  map.on('zoomend',function(){
+    nbMarkerClusterMax = 0;
+    markers.refreshClusters();
+  })
+
+
   map.addLayer(markers);
 
   var btnPlay = $("#btnPlay");
