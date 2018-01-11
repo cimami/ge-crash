@@ -135,6 +135,9 @@ $(document).ready(function () {
         text: null
       }
     },
+    tooltip: {
+      pointFormat: '<b>{point.y}</b>'
+    },
     xAxis: {
       type: 'datetime'
     }
