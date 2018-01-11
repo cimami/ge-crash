@@ -186,10 +186,15 @@ $(document).ready(function () {
     }]
 });
 
+  var heatmapEnabled = true;
   $("#heatmap").on("change",
     function(){
-      if($(this).is(":checked"))
+      heatmapEnabled = $(this).is(":checked");
+      if($(this).is(":checked")){
         map.addLayer(heat);
+        // Actualize
+        udpateMarkersWithoutAnimation();
+      }
       else
         map.removeLayer(heat);
     }
@@ -340,7 +345,8 @@ $(document).ready(function () {
 
   function clearAll(){
     markers.clearLayers(); // reset markers layer
-    heat.setLatLngs([]) // reset heat map
+    if(heatmapEnabled)
+      heat.setLatLngs([]) // reset heat map
 
     // Clear interval
     clearInterval(timer);
@@ -617,8 +623,9 @@ $(document).ready(function () {
                   $(this).remove();
                 });
             }
-
-            heat.addLatLng(latLng);
+            
+            if(heatmapEnabled)
+              heat.addLatLng(latLng);
 
             // Increment causes 
             var cause = accident.CAUSE.split(" - ")[0];
