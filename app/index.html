@@ -27,13 +27,14 @@
   />
   <script type='text/javascript' src='https://unpkg.com/leaflet.markercluster@1.2.0/dist/leaflet.markercluster.js'></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js" integrity="sha256-65UqrlgGoRAnKfKRuriH3eeDrOhZgZo1SCenduc+SGo=" crossorigin="anonymous"></script>
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js" integrity="sha256-65UqrlgGoRAnKfKRuriH3eeDrOhZgZo1SCenduc+SGo="
+    crossorigin="anonymous"></script>
+
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
 
   <link rel="stylesheet" href="./js/rangeslide.js-master/dist/rangeslide.css">
-  
+
   <script src="./js/rangeslide.js-master/dist/rangeslide.js"></script>
 </head>
 
@@ -57,79 +58,105 @@
     </div>
   </nav>
 
-      <div class="right-info bg-dark text-white" id="right-info-panel">
-      <div class="card-block">
-        <h3>Info</h3>
-        <table class="table-count">
-          <tr>
-            <th style="width:50%;">Blessés légers</th>
-            <th style="width:40%;">Blessés graves</th>
-            <th style="width:10%;">Morts</th>
-          </tr>
-          <tr>
-            <td>
-              <span id="injuredsCount">0</span>
-            </td>
-            <td>
-              <span id="heavyInjuredCount">0</span>
-            </td>
-            <td>
-              <span id="deathsCount">0</span>
-            </td>
-          </tr>
-          <tr id="rowIcons" style="font-size:20px;">
-            <td>
+  <div class="right-info bg-dark text-white" id="right-info-panel">
+    <div class="card-block">
+
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" href="#injured" role="tab" data-toggle="tab">Blessés légers/graves/morts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#causes" role="tab" data-toggle="tab">Causes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#vehicule" role="tab" data-toggle="tab">Véhicules</a>
+        </li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content" >
+        <div role="tabpanel" class="tab-pane fade in active" id="injured">
+          <table class="table-count">
+            <tr>
+              <th style="width:50%;">Blessés légers</th>
+              <th style="width:40%;">Blessés graves</th>
+              <th style="width:10%;">Morts</th>
+            </tr>
+            <tr>
+              <td>
+                <span id="injuredsCount">0</span>
+              </td>
+              <td>
+                <span id="heavyInjuredCount">0</span>
+              </td>
+              <td>
+                <span id="deathsCount">0</span>
+              </td>
+            </tr>
+            <tr id="rowIcons" style="font-size:20px;">
+              <td>
                 <div id="injuredsIcons"></div>
-            </td>
-            <td>
-              <div id="heavyInjuredsIcons"></div>
-            </td>
-            <td>
-              <div id="deathsIcons"></div>
-            </td>
-          </tr>
-        </table>
+              </td>
+              <td>
+                <div id="heavyInjuredsIcons"></div>
+              </td>
+              <td>
+                <div id="deathsIcons"></div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="causes">
+
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="vehicule">
+
+        </div>
       </div>
     </div>
+  </div>
 
-    <div id="mapCrash">
-      <div id="circlesContainer"></div>
-    </div>
+  <div id="mapCrash">
+    <div id="circlesContainer"></div>
+  </div>
 
 
-    <div class="card player">
-      <div class="card-block">
-        <div style="margin:4px;">
-          <div>
-            <button type="button" id="btnPlay" class="btn btn-primary play">
-              <i class="fa fa-play"></i>
-            </button>
-            <button type="button" id="btnPause" class="btn btn-secondary pause" style="display:none;">
-              <i class="fa fa-pause"></i>
-            </button>
-            <button type="button" id="btnStop" class="btn btn-primary stop">
-              <i class="fa fa-stop"></i>
-            </button>
-            <input type="date" name="begin" id="inputDateBegin" value="2016-01-01" class="form-control">
-            <input type="date" name="end" id="inputDateEnd" value="2016-12-31" class="form-control">
-          </div>
-          <div style="width:100%;">
-            <form>
-              <input name="slider" id="slider" class="slider" style="width:100%;" type="range" min="0" max="100000" value="0" step="1" />
-              <output for="slider"><span id="currentDateElement"></span></output>
-            </form>
-            <!--<div id="barSlider" style="    height: 70px;
+  <div class="card player">
+    <div class="card-block">
+      <div style="margin:4px;">
+        <div>
+          <button type="button" id="btnPlay" class="btn btn-primary play">
+            <i class="fa fa-play"></i>
+          </button>
+          <button type="button" id="btnPause" class="btn btn-secondary pause" style="display:none;">
+            <i class="fa fa-pause"></i>
+          </button>
+          <button type="button" id="btnStop" class="btn btn-primary stop">
+            <i class="fa fa-stop"></i>
+          </button>
+          <input type="date" name="begin" id="inputDateBegin" value="2016-01-01" class="form-control">
+          <input type="date" name="end" id="inputDateEnd" value="2016-12-31" class="form-control">
+        </div>
+        <div style="width:100%;">
+          <form>
+            <input name="slider" id="slider" class="slider" style="width:100%;" type="range" min="0" max="100000" value="0" step="1"
+            />
+            <output for="slider">
+              <span id="currentDateElement"></span>
+            </output>
+          </form>
+          <!--<div id="barSlider" style="    height: 70px;
             /* top: -10px; */
             margin-top: -10px;
             margin-left: 1px;
             position: absolute;
             width: 3px;
             background: #516792;"></div>-->
-          </div>
         </div>
       </div>
-      <div id="histogram" style="width:100%; height:100px;margin-top:-10px;"></div>
     </div>
+    <div id="histogram" style="width:100%; height:100px;margin-top:-10px;"></div>
+  </div>
   <!-- Bootstrap core JavaScript
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
