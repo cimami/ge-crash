@@ -70,6 +70,7 @@ $(document).ready(function () {
   var currentDateElement = $("#currentDateElement");
   var circlesContainer = $("#circlesContainer");
   var rightInfoPanel = document.getElementById("right-info-panel");
+  var nbAccidentDiv = $("#nbAccidents");
   var accidents = [];
   var causes = [];
   var causesPosition = {}; // Dictionnary of position of array causes for "cause string"
@@ -95,7 +96,7 @@ $(document).ready(function () {
   var TIME_BEGIN_TO_END = 10000; // Milliseconds
   var TIME_FRAME = 10; // Millisecond
   var TIME_CALCULATION = 10; // Millisecond, time to calculate
-  var TIME_UDPATE_CHARTS = 100;
+  var TIME_UDPATE_CHARTS = 1000;
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
   var ICONS_PERSON_FONT_SIZE = parseInt(rowIconsInjured.css("font-size"));
   var MIN_ICONS_PERSON_FONT_SIZE = 10;
@@ -643,6 +644,8 @@ $(document).ready(function () {
             break;
           }
         }
+        // Set number of accident
+        nbAccidentDiv.text(currentPosAccident + " accidents");
       }
 
       // Update piechart less often than calculation/animation
