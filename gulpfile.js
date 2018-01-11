@@ -31,5 +31,3 @@ gulp.task('dev', ['copy', 'browserSync'], function() {
   gulp.watch('app/*.js', browserSync.reload);
   //gulp.watch('data/*.json', browserSync.reload);
 });
-
-gulp.task('default', ['serve'])
