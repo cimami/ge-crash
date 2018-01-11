@@ -1,6 +1,11 @@
 $(document).ready(function () {
   var nbMarkerClusterMax = 0;
 
+  var markerIcon = L.icon({
+    iconUrl: 'marker.png',
+    iconAnchor: [12, 12]
+});
+
   // Create the map
   var options = {
     attributionControl: false,
@@ -518,7 +523,8 @@ $(document).ready(function () {
               color: '#d10000',
               fillOpacity: 0.1,
               weight: 0.5,
-              radius: 5
+              radius: 5,
+              icon:markerIcon
             }).bindPopup(htmlDetail, {
                 maxWidth : 'auto'
               })
