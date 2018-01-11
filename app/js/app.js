@@ -73,6 +73,7 @@ $(document).ready(function () {
   var rightInfoPanel = document.getElementById("right-info-panel");
   var rowIcons = $("#rowIcons");
   var accidents = [];
+  var causes = {};
 
   var timer;
   var currentTime = 0; // Current time in ms
@@ -121,6 +122,63 @@ $(document).ready(function () {
       type: 'datetime'
     }
   });
+
+  var vehiculePieChart = Highcharts.chart('vehiculePieChart', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+        backgroundColor:'rgba(255, 255, 255, 0.0)'
+    },
+    title: {
+        text: ''
+    },
+    credits: {
+      enabled: false
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: 'white'
+                }
+            }
+        }
+    },
+    series: [{
+        name: 'Brands',
+        colorByPoint: true,
+        data: [{
+            name: 'IE',
+            y: 56.33
+        }, {
+            name: 'Chrome',
+            y: 24.03,
+            sliced: true,
+            selected: true
+        }, {
+            name: 'Firefox',
+            y: 10.38
+        }, {
+            name: 'Safari',
+            y: 4.77
+        }, {
+            name: 'Opera',
+            y: 0.91
+        }, {
+            name: 'Other',
+            y: 0.2
+        }]
+    }]
+});
 
   // Modify offset of position of current date
   function modifyOffset() {
@@ -411,6 +469,12 @@ $(document).ready(function () {
               });
 
             heat.addLatLng(latLng);
+
+            // Increment causes 
+            if(causes[accident.CAUSE] !== undefined)
+              causes[accident.CAUSE]++;
+            else
+              causes[accident.CAUSE] = 1;
           }
           // Exit loop
           else {
