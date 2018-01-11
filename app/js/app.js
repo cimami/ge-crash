@@ -183,6 +183,14 @@ $(document).ready(function () {
     }]
 });
 
+  $("#heatmap").on("change",
+    function(){
+      if($(this).is(":checked"))
+        map.addLayer(heat);
+      else
+        map.removeLayer(heat);
+    }
+  )
   // Modify offset of position of current date
   function modifyOffset() {
     var el, newPoint, newPlace, offset, siblings, k;
