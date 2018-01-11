@@ -93,7 +93,7 @@ $(document).ready(function () {
   var TIME_UDPATE_CHARTS = 100;
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
   var ICONS_PERSON_FONT_SIZE = parseInt(rowIconsInjured.css("font-size"));
-  var MIN_ICONS_PERSON_FONT_SIZE = 8;
+  var MIN_ICONS_PERSON_FONT_SIZE = 10;
   var playStatus = false;
   var currentPosAccident = 0;
   var myChart = undefined;
@@ -217,7 +217,6 @@ $(document).ready(function () {
 
   // Save bound to restore when mouse leave
   var bounds = undefined;
-  var checkOverflow = true;
 
   // Add nb icon to divContainer
   var addIconsTo = function (rowIcons, divContainer, countSpan, classIcon, nb, group, marker) {
@@ -281,18 +280,16 @@ $(document).ready(function () {
       divContainer.append(spanAccident);
 
       // Check overlow    
-      if (checkOverflow && (rightInfoPanel.offsetHeight < rightInfoPanel.scrollHeight ||
-        divContainer.offsetWidth < divContainer.scrollWidth)) {
-        checkOverflow = false;
+      if (rightInfoPanel.offsetHeight < rightInfoPanel.scrollHeight) {
         var fontSize = parseFloat(rowIcons.css("font-size"));
         
         if(fontSize > MIN_ICONS_PERSON_FONT_SIZE){
-          fontSize = (fontSize - 2) + "px";
+          fontSize = (fontSize - 0.2) + "px";
 
           // Animate font size
           $(rowIcons).animate({
             fontSize: fontSize
-          }, 2000, function () {
+          }, 0, function () {
             checkOverflow = true;
           });
         }
