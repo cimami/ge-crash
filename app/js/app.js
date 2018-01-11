@@ -245,8 +245,27 @@ $(document).ready(function () {
   // Save bound to restore when mouse leave
   var bounds = undefined;
 
+  var updateFontSizeIcons = function(rowIcons, loopCheck){
+    do{
+      if(rightInfoPanel.offsetHeight < rightInfoPanel.scrollHeight){
+        var fontSize = parseFloat(rowIcons.css("font-size"));
+    
+        if(fontSize > MIN_ICONS_PERSON_FONT_SIZE){
+          fontSize = (fontSize - (loopCheck?1:0.2)) + "px";
+
+          // Animate font size
+          $(rowIcons).css({
+            fontSize: fontSize
+          });
+        }else
+          loopCheck = false;
+      }else
+        loopCheck = false;
+    }while(loopCheck)
+  }
+
   // Add nb icon to divContainer
-  var addIconsTo = function (rowIcons, divContainer, countSpan, classIcon, nb, group, marker) {
+  var addIconsTo = function (rowIcons, divContainer, countSpan, classIcon, nb, group, marker,directAtTheEnd) {
     if(nb > 0){
       // Keep open or not when click
       var keepOpen = false;
@@ -307,19 +326,8 @@ $(document).ready(function () {
       divContainer.append(spanAccident);
 
       // Check overlow    
-      if (rightInfoPanel.offsetHeight < rightInfoPanel.scrollHeight) {
-        var fontSize = parseFloat(rowIcons.css("font-size"));
-        
-        if(fontSize > MIN_ICONS_PERSON_FONT_SIZE){
-          fontSize = (fontSize - 0.2) + "px";
-
-          // Animate font size
-          $(rowIcons).animate({
-            fontSize: fontSize
-          }, 0, function () {
-            checkOverflow = true;
-          });
-        }
+      if (!directAtTheEnd) {
+        updateFontSizeIcons(rowIcons);
       }
 
       // Set count
@@ -425,8 +433,13 @@ $(document).ready(function () {
       pointInterval: timeSizeBar
     }, true);
   }
-  inputDateBegin.on("change", updateInfoByDateInputs);
-  inputDateEnd.on("change", updateInfoByDateInputs);
+
+  var udpateMarkersWithoutAnimation = function(){
+    makeAnimation(null, true);
+  }
+
+  inputDateBegin.on("change", udpateMarkersWithoutAnimation);
+  inputDateEnd.on("change", udpateMarkersWithoutAnimation);
 
   function getNbTwoWheel(a){
     return a.NB_BICYCLETTES + a.NB_CYCLOMOTEURS + a.NB_MOTOS_50 + a.NB_MOTOS_125 
@@ -448,9 +461,9 @@ $(document).ready(function () {
         return args[+(a.substr(1,a.length-2))||0];
     });
   };
-
+ 
   // On play click
-  btnPlay.click(function () {
+  var makeAnimation = function (event, directAtTheEnd) {
     updateInfoByDateInputs();
 
     //Play
@@ -458,6 +471,14 @@ $(document).ready(function () {
 
     // Clear interval
     clearInterval(timer);
+
+    // Direct at the end ?
+    if(directAtTheEnd === undefined)
+      directAtTheEnd = false;
+    if(directAtTheEnd){
+      currentTime = TIME_BEGIN_TO_END - TIME_FRAME; // Go and simulate last frame
+      $("#loading").show();
+    }
 
     // Each time frame
     timer = setInterval(function () {
@@ -469,11 +490,17 @@ $(document).ready(function () {
       // Finish ?
       if (currentSliderValue > SLIDER_MAX_RANGE) {
         clearInterval(timer);
+        setPlayStatus(false);
+        if(directAtTheEnd){
+          $("#loading").hide();
+          updateFontSizeIcons(rowIconsInjured, true);
+          updateFontSizeIcons(rowIconsVehicule, true);
+        }
         return;
       }
 
       // Show some accidents when it's time to calculate
-      if (currentTime % TIME_CALCULATION == 0) {
+      if (currentTime % TIME_CALCULATION == 0 || currentTime == TIME_BEGIN_TO_END) {
         var currentDate = new Date(dateBegin.getTime() +
           timeExtend * currentSliderValue / SLIDER_MAX_RANGE);
 
@@ -555,19 +582,19 @@ $(document).ready(function () {
             let group = "id_" + accident.ID_ACCIDENT;
             
             // Injured people icons
-            addIconsTo(rowIconsInjured, injuredIcons, injuredsCount, "male", accident.NB_BLESSES_LEGERS, group, marker);
-            addIconsTo(rowIconsInjured, heavyInjuredIcons, heavyInjuredCount, "male", accident.NB_BLESSES_GRAVES, group, marker);
-            addIconsTo(rowIconsInjured, deathsIcons, deathsCount, "male", accident.NB_TUES, group, marker);
+            addIconsTo(rowIconsInjured, injuredIcons, injuredsCount, "male", accident.NB_BLESSES_LEGERS, group, marker, directAtTheEnd);
+            addIconsTo(rowIconsInjured, heavyInjuredIcons, heavyInjuredCount, "male", accident.NB_BLESSES_GRAVES, group, marker, directAtTheEnd);
+            addIconsTo(rowIconsInjured, deathsIcons, deathsCount, "male", accident.NB_TUES, group, marker, directAtTheEnd);
 
             // Vehicule people
             addIconsTo(rowIconsVehicule, fourWheelIcons, fourWheelCount, 
-              "car", nbFourWheel, group, marker);
+              "car", nbFourWheel, group, marker, directAtTheEnd);
             addIconsTo(rowIconsVehicule, twoWheelIcons, twoWheelCount,
-              "bicycle", nbTwoWheel, group, marker);
+              "bicycle", nbTwoWheel, group, marker, directAtTheEnd);
             addIconsTo(rowIconsVehicule, tpgIcons, tpgCount, 
-              "subway", nbTpg, group, marker);
+              "subway", nbTpg, group, marker, directAtTheEnd);
             
-            if(circleEnabled){
+            if(circleEnabled && !directAtTheEnd){
               // Get position real of lattitude and longitude
               var posCircleAnimation = map.layerPointToContainerPoint(
                 map.latLngToLayerPoint(L.latLng(latLng))
@@ -610,7 +637,7 @@ $(document).ready(function () {
       }
 
       // Update piechart less often than calculation/animation
-      if (currentTime % TIME_UDPATE_CHARTS == 0 || currentTime == TIME_BEGIN_TO_END /*end*/) {
+      if (currentTime % TIME_UDPATE_CHARTS == 0 && !directAtTheEnd || currentTime == TIME_BEGIN_TO_END /*end*/) {
         causePieChart.series[0].update({
             data: causes.sort(function(a, b) {
                 return  b.y - a.y;
@@ -619,7 +646,9 @@ $(document).ready(function () {
         console.log("update pie chart");
       }
     }, TIME_FRAME);
-  });
+  };
+
+  btnPlay.click(makeAnimation);
 
   // Set tile layer, on future we could create own
   L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
@@ -640,7 +669,8 @@ $(document).ready(function () {
 
     accidents = data;
 
-    // We get accidents : add histogram
-    updateInfoByDateInputs();
+    /** AT THE END : SHOW information without ANIMATION */
+    udpateMarkersWithoutAnimation();
   });
+  $("#loading").show();
 });
