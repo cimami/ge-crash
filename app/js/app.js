@@ -459,7 +459,7 @@ $(document).ready(function () {
             heat.addLatLng(latLng);
 
             // Increment causes 
-            var cause = accident.CAUSE;
+            var cause = accident.CAUSE.split(" - ")[0];
             if(causes[causesPosition[cause]] !== undefined)
               causes[causesPosition[cause]].y++;
             else{
