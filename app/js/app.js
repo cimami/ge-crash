@@ -286,7 +286,9 @@ $(document).ready(function () {
   }
 
   // On stop click
-  btnStop.click(function () {
+  btnStop.click(clearAll);
+
+  function clearAll(){
     markers.clearLayers(); // reset markers layer
     heat.setLatLngs([]) // reset heat map
 
@@ -315,7 +317,9 @@ $(document).ready(function () {
 
     // Clear date
     currentDateElement.html("");
-  });
+
+    resetCausesChart();
+  }
 
   // On pause click
   btnPause.click(function () {
@@ -330,7 +334,7 @@ $(document).ready(function () {
   }
 
   function updateInfoByDateInputs(){
-    resetCausesChart();
+    clearAll();
 
     dateBegin = new Date(inputDateBegin.val());
     dateEnd = new Date(inputDateEnd.val());
@@ -339,7 +343,7 @@ $(document).ready(function () {
     accidentsBetweenTime = accidents.filter(a => (a.DATE_ > dateBegin && a.DATE_ < dateEnd));
 
     // Calculate data for histogram
-    var nbBar = 12;
+    var nbBar = 20;
     var timeSizeBar = timeExtend / nbBar;
 
     var nbAccidentCurrentBar = 0;
