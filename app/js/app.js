@@ -81,7 +81,7 @@ $(document).ready(function () {
   var TIME_BEGIN_TO_END = 10000; // Milliseconds
   var TIME_FRAME = 10; // Millisecond
   var TIME_CALCULATION = 10; // Millisecond, time to calculate
-  var TIME_UDPATE_CHARTS = 1000;
+  var TIME_UDPATE_CHARTS = 100;
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
   var ICONS_PERSON_FONT_SIZE = parseInt(rowIcons.css("font-size"));
   var playStatus = false;
@@ -323,7 +323,15 @@ $(document).ready(function () {
     clearInterval(timer);
   });
 
+  function resetCausesChart(){
+    causes = [];
+    causesPosition = {};
+    causePieChart.series[0].setData([]);
+  }
+
   function updateInfoByDateInputs(){
+    resetCausesChart();
+
     dateBegin = new Date(inputDateBegin.val());
     dateEnd = new Date(inputDateEnd.val());
     timeExtend = dateEnd.getTime() - dateBegin.getTime();
@@ -475,12 +483,12 @@ $(document).ready(function () {
       }
 
       // Update piechart less often than calculation/animation
-      if (currentTime % TIME_UDPATE_CHARTS == 0) {
+      if (currentTime % TIME_UDPATE_CHARTS == 0 || currentTime == TIME_BEGIN_TO_END /*end*/) {
         causePieChart.series[0].update({
-          data: causes.sort(function(a, b) {
-              return  b.y - a.y;
-          })
-      });
+            data: causes.sort(function(a, b) {
+                return  b.y - a.y;
+            })
+        });
         console.log("update pie chart");
       }
     }, TIME_FRAME);
