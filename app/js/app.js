@@ -93,6 +93,7 @@ $(document).ready(function () {
   var TIME_UDPATE_CHARTS = 100;
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
   var ICONS_PERSON_FONT_SIZE = parseInt(rowIconsInjured.css("font-size"));
+  var MIN_ICONS_PERSON_FONT_SIZE = 8;
   var playStatus = false;
   var currentPosAccident = 0;
   var myChart = undefined;
@@ -284,14 +285,17 @@ $(document).ready(function () {
         divContainer.offsetWidth < divContainer.scrollWidth)) {
         checkOverflow = false;
         var fontSize = parseFloat(rowIcons.css("font-size"));
-        fontSize = (fontSize - 2) + "px";
+        
+        if(fontSize > MIN_ICONS_PERSON_FONT_SIZE){
+          fontSize = (fontSize - 2) + "px";
 
-        // Animate font size
-        $(rowIcons).animate({
-          fontSize: fontSize
-        }, 2000, function () {
-          checkOverflow = true;
-        });
+          // Animate font size
+          $(rowIcons).animate({
+            fontSize: fontSize
+          }, 2000, function () {
+            checkOverflow = true;
+          });
+        }
       }
 
       // Set count
