@@ -152,8 +152,14 @@ $(document).ready(function () {
                 style: {
                     color: 'white'
                 }
-            }
+            },
+            showInLegend: true
         }
+    },
+    legend: {
+      itemStyle: {
+        color:"white"
+      }
     },
     series: [{
         name: 'Causes',
