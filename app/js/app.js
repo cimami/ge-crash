@@ -70,6 +70,7 @@ $(document).ready(function () {
   var currentDateElement = $("#currentDateElement");
   var circlesContainer = $("#circlesContainer");
   var rightInfoPanel = document.getElementById("right-info-panel");
+  var nbAccidentDiv = $("#nbAccidents");
   var accidents = [];
   var causes = [];
   var causesPosition = {}; // Dictionnary of position of array causes for "cause string"
@@ -95,7 +96,7 @@ $(document).ready(function () {
   var TIME_BEGIN_TO_END = 10000; // Milliseconds
   var TIME_FRAME = 10; // Millisecond
   var TIME_CALCULATION = 10; // Millisecond, time to calculate
-  var TIME_UDPATE_CHARTS = 100;
+  var TIME_UDPATE_CHARTS = 1000;
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
   var ICONS_PERSON_FONT_SIZE = parseInt(rowIconsInjured.css("font-size"));
   var MIN_ICONS_PERSON_FONT_SIZE = 10;
@@ -158,10 +159,12 @@ $(document).ready(function () {
       enabled: false
     },
     tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> ({point.y})'
     },
+    colors: ["#7cb5ec", "#ededed", "#90ed7d", "#f7a35c", "#8085e9", "#f15c80", "#e4d354", "#2b908f", "#f45b5b", "#91e8e1"],
     plotOptions: {
         pie: {
+            borderWidth : null,
             allowPointSelect: true,
             cursor: 'pointer',
             dataLabels: {
@@ -180,7 +183,7 @@ $(document).ready(function () {
       }
     },
     series: [{
-        name: 'Causes',
+        name: 'Cause',
         colorByPoint: true,
         data: []
     }]
@@ -277,40 +280,50 @@ $(document).ready(function () {
 
       var spanAccident = $("<span class='" + group + "' style='margin-right:6px;'></i>");
 
+      var timerEnter;
+
       // On mouse enter : open popup
       spanAccident.on("mouseenter", function () {
-        if (!bounds)
+        timerEnter = setTimeout(function () {
+          timerEnter = undefined;
+
+          if (!bounds)
           bounds = map.getBounds();
 
-        // Open popup
-        //
-        //map.panTo(marker.getLatLng(), {animate: true, duration: 5.0});
-        map.once('moveend', function () {
-          // Timeout to zoomToShowLayer else : recursive infinte call of event...
-          setTimeout(function () {
-            markers.zoomToShowLayer(marker, function () {
-              marker.openPopup();
-            });
-          }, 0);
-        });
-        map.flyTo(marker.getLatLng(), 18,
-          { animate: true, duration: 1.0 }
-        );
+          // Open popup
+          //
+          //map.panTo(marker.getLatLng(), {animate: true, duration: 5.0});
+          map.once('moveend', function () {
+            // Timeout to zoomToShowLayer else : recursive infinte call of event...
+            setTimeout(function () {
+              markers.zoomToShowLayer(marker, function () {
+                marker.openPopup();
+              });
+            }, 0);
+          });
+          map.flyTo(marker.getLatLng(), 18,
+            { animate: true, duration: 1.0 }
+          );
+        }, 800);    
 
         // Color each calss
         $("." + group).each(function (el) {
           $(this).css('color', 'red');
         });
+
       });
 
       // On mouse leave : close popup
       spanAccident.on("mouseleave", function () {
-        if (!keepOpen) {
+        console.log(timerEnter)
+        if (!keepOpen && timerEnter === undefined) {
           marker.closePopup();
           if (bounds) {
             map.fitBounds(bounds);
           }
         }
+        clearTimeout(timerEnter);
+        timerEnter = undefined;
 
         // Color each class
         $("." + group).each(function (el) {
@@ -628,7 +641,7 @@ $(document).ready(function () {
               heat.addLatLng(latLng);
 
             // Increment causes 
-            var cause = accident.CAUSE.split(" - ")[0];
+            var cause = accident.CAUSE;
             if(causes[causesPosition[cause]] !== undefined)
               causes[causesPosition[cause]].y++;
             else{
@@ -641,6 +654,8 @@ $(document).ready(function () {
             break;
           }
         }
+        // Set number of accident
+        nbAccidentDiv.text(currentPosAccident + " accidents");
       }
 
       // Update piechart less often than calculation/animation
