@@ -73,13 +73,15 @@ $(document).ready(function () {
   var rightInfoPanel = document.getElementById("right-info-panel");
   var rowIcons = $("#rowIcons");
   var accidents = [];
-  var causes = {};
+  var causes = [];
+  var causesPosition = {}; // Dictionnary of position of array causes for "cause string"
 
   var timer;
   var currentTime = 0; // Current time in ms
   var TIME_BEGIN_TO_END = 10000; // Milliseconds
   var TIME_FRAME = 10; // Millisecond
   var TIME_CALCULATION = 10; // Millisecond, time to calculate
+  var TIME_UDPATE_CHARTS = 1000;
   var SLIDER_MAX_RANGE = slider.attr("max"); // 1000000
   var ICONS_PERSON_FONT_SIZE = parseInt(rowIcons.css("font-size"));
   var playStatus = false;
@@ -123,7 +125,7 @@ $(document).ready(function () {
     }
   });
 
-  var vehiculePieChart = Highcharts.chart('vehiculePieChart', {
+  var causePieChart = Highcharts.chart('causePieChart', {
     chart: {
         plotBackgroundColor: null,
         plotBorderWidth: null,
@@ -146,7 +148,7 @@ $(document).ready(function () {
             cursor: 'pointer',
             dataLabels: {
                 enabled: true,
-                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                format: '{point.percentage:.1f} %',
                 style: {
                     color: 'white'
                 }
@@ -154,29 +156,9 @@ $(document).ready(function () {
         }
     },
     series: [{
-        name: 'Brands',
+        name: 'Causes',
         colorByPoint: true,
-        data: [{
-            name: 'IE',
-            y: 56.33
-        }, {
-            name: 'Chrome',
-            y: 24.03,
-            sliced: true,
-            selected: true
-        }, {
-            name: 'Firefox',
-            y: 10.38
-        }, {
-            name: 'Safari',
-            y: 4.77
-        }, {
-            name: 'Opera',
-            y: 0.91
-        }, {
-            name: 'Other',
-            y: 0.2
-        }]
+        data: []
     }]
 });
 
@@ -471,16 +453,25 @@ $(document).ready(function () {
             heat.addLatLng(latLng);
 
             // Increment causes 
-            if(causes[accident.CAUSE] !== undefined)
-              causes[accident.CAUSE]++;
-            else
-              causes[accident.CAUSE] = 1;
+            var cause = accident.CAUSE;
+            if(causes[causesPosition[cause]] !== undefined)
+              causes[causesPosition[cause]].y++;
+            else{
+              var pos = causes.push({name:cause,y : 1}) - 1;
+              causesPosition[cause] = pos;
+            }
           }
           // Exit loop
           else {
             break;
           }
         }
+      }
+
+      // Update piechart less often than calculation/animation
+      if (currentTime % TIME_UDPATE_CHARTS == 0) {
+        causePieChart.series[0].update({data:causes});
+        console.log("update pie chart");
       }
     }, TIME_FRAME);
   });
