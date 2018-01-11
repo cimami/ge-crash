@@ -280,40 +280,50 @@ $(document).ready(function () {
 
       var spanAccident = $("<span class='" + group + "' style='margin-right:6px;'></i>");
 
+      var timerEnter;
+
       // On mouse enter : open popup
       spanAccident.on("mouseenter", function () {
-        if (!bounds)
+        timerEnter = setTimeout(function () {
+          timerEnter = undefined;
+
+          if (!bounds)
           bounds = map.getBounds();
 
-        // Open popup
-        //
-        //map.panTo(marker.getLatLng(), {animate: true, duration: 5.0});
-        map.once('moveend', function () {
-          // Timeout to zoomToShowLayer else : recursive infinte call of event...
-          setTimeout(function () {
-            markers.zoomToShowLayer(marker, function () {
-              marker.openPopup();
-            });
-          }, 0);
-        });
-        map.flyTo(marker.getLatLng(), 18,
-          { animate: true, duration: 1.0 }
-        );
+          // Open popup
+          //
+          //map.panTo(marker.getLatLng(), {animate: true, duration: 5.0});
+          map.once('moveend', function () {
+            // Timeout to zoomToShowLayer else : recursive infinte call of event...
+            setTimeout(function () {
+              markers.zoomToShowLayer(marker, function () {
+                marker.openPopup();
+              });
+            }, 0);
+          });
+          map.flyTo(marker.getLatLng(), 18,
+            { animate: true, duration: 1.0 }
+          );
+        }, 800);    
 
         // Color each calss
         $("." + group).each(function (el) {
           $(this).css('color', 'red');
         });
+
       });
 
       // On mouse leave : close popup
       spanAccident.on("mouseleave", function () {
-        if (!keepOpen) {
+        console.log(timerEnter)
+        if (!keepOpen && timerEnter === undefined) {
           marker.closePopup();
           if (bounds) {
             map.fitBounds(bounds);
           }
         }
+        clearTimeout(timerEnter);
+        timerEnter = undefined;
 
         // Color each class
         $("." + group).each(function (el) {
