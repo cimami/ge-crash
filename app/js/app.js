@@ -191,6 +191,17 @@ $(document).ready(function () {
         map.removeLayer(heat);
     }
   )
+
+  var circleEnabled = true;
+  $("#circleEnabled").on("change",
+    function(){
+      if($(this).is(":checked"))
+        circleEnabled = true;
+      else
+        circleEnabled = false;
+    }
+  )
+
   // Modify offset of position of current date
   function modifyOffset() {
     var el, newPoint, newPlace, offset, siblings, k;
@@ -552,28 +563,30 @@ $(document).ready(function () {
               "bicycle", nbTwoWheel, group, marker);
             addIconsTo(rowIconsVehicule, tpgIcons, tpgCount, 
               "subway", nbTpg, group, marker);
+            
+            if(circleEnabled){
+              // Get position real of lattitude and longitude
+              var posCircleAnimation = map.layerPointToContainerPoint(
+                map.latLngToLayerPoint(L.latLng(latLng))
+              );
 
-            // Get position real of lattitude and longitude
-            var posCircleAnimation = map.layerPointToContainerPoint(
-              map.latLngToLayerPoint(L.latLng(latLng))
-            );
-
-            // Add circle at good place, and animate
-            var circleAnimation = $("<span/>", {
-              "class": "circle",
-              "css": {
-                "left": posCircleAnimation.x + "px",
-                "top": posCircleAnimation.y + "px"
-              }
-            })
-              .appendTo(circlesContainer)
-              .animate({
-                opacity: 0.0,
-                height: "70px",
-                width: "70px"
-              }, 300, function () {
-                $(this).remove();
-              });
+              // Add circle at good place, and animate
+              var circleAnimation = $("<span/>", {
+                "class": "circle",
+                "css": {
+                  "left": posCircleAnimation.x + "px",
+                  "top": posCircleAnimation.y + "px"
+                }
+              })
+                .appendTo(circlesContainer)
+                .animate({
+                  opacity: 0.0,
+                  height: "70px",
+                  width: "70px"
+                }, 300, function () {
+                  $(this).remove();
+                });
+            }
 
             heat.addLatLng(latLng);
 
