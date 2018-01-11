@@ -167,3 +167,7 @@ output {
     box-sizing: border-box;
     opacity: 0.7;
 }
+
+.right-info a{
+    color : white;
+}
