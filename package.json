@@ -7,7 +7,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app",
+    "postinstall": "gulp dev"
   },
   "repository": {
     "type": "git",
@@ -24,7 +26,7 @@
     "url": "https://github.com/cimami/ge-crash/issues"
   },
   "homepage": "https://github.com/cimami/ge-crash#readme",
-  "devDependencies": {
+  "dependencies": {
     "browser-sync": "2.18.13",
     "gulp": "^3.9.1",
     "gulp-clean-css": "3.9.0",
