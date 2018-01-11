@@ -158,10 +158,12 @@ $(document).ready(function () {
       enabled: false
     },
     tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> ({point.y})'
     },
+    colors: ["#7cb5ec", "#ededed", "#90ed7d", "#f7a35c", "#8085e9", "#f15c80", "#e4d354", "#2b908f", "#f45b5b", "#91e8e1"],
     plotOptions: {
         pie: {
+            borderWidth : null,
             allowPointSelect: true,
             cursor: 'pointer',
             dataLabels: {
@@ -180,7 +182,7 @@ $(document).ready(function () {
       }
     },
     series: [{
-        name: 'Causes',
+        name: 'Cause',
         colorByPoint: true,
         data: []
     }]
@@ -628,7 +630,7 @@ $(document).ready(function () {
               heat.addLatLng(latLng);
 
             // Increment causes 
-            var cause = accident.CAUSE.split(" - ")[0];
+            var cause = accident.CAUSE;
             if(causes[causesPosition[cause]] !== undefined)
               causes[causesPosition[cause]].y++;
             else{
