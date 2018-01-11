@@ -476,7 +476,11 @@ $(document).ready(function () {
 
       // Update piechart less often than calculation/animation
       if (currentTime % TIME_UDPATE_CHARTS == 0) {
-        causePieChart.series[0].update({data:causes});
+        causePieChart.series[0].update({
+          data: causes.sort(function(a, b) {
+              return  b.y - a.y;
+          })
+      });
         console.log("update pie chart");
       }
     }, TIME_FRAME);
