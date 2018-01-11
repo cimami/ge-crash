@@ -1,45 +1,59 @@
-<!-- markdownlint-disable MD009 -->
+<!-- markdownlint-disable MD009 MD032 -->
 
 # GE-Crash
 
-This project offers a visualization of the traffic accidents that happened since 2010 in Geneva, Switzerland, in a selected time frame.
+This project offers a visualization of the traffic accidents that happened since 2010 in Geneva, Switzerland, in a user selected time frame.
 
 This work has been done as part of the HES-SO MSE Visualization Information course.
 
-![Application preview](docs/app_general_view.png)
+![Application preview](docs/app_general_view.png?raw=true "Application preview")
 
-## Installation & execution
+## How to use it
 
-### Install gulp
+### Installing and launching the app
 
-```npm install -g gulp```  
-```npm install```
+- [Install NPM](https://www.npmjs.com/get-npm)
+- Run the following commands :
 
-### Run
+```bash
+    git clone https://github.com/cimami/ge-crash.git
+    npm install -g gulp
+    npm install
+    gulp dev
+```
 
-```gulp dev```
+### Updating the data
 
-## Update data
-
-- Download in csv and replace ```data/CSV_PTC_ACCIDENTS```
-- Check encoding of ```OTC_ACCIDENTS.csv``` in ```utf-8``` and not in ```Windows 1252``` (open with editor and save as..)
-- In ```data``` folder run ```python csvToJson.py```
-- Run ```gulp copy``` then ```gulp dev```
-
-
-## To do
-
-- ~~Take in account the time of accident (not only the date)~~
-- ~~Add animation when accident appears~~
-- Add other informations (numbers of dead, injured, ...)
-- Add stop/reset
-- (Allow user can set slider position)
+- Download the latest version of CSV data and replace the current file in `data/CSV_PTC_ACCIDENTS`
+- Into `data` folder, run `python csvToJson.py`
+- Run `gulp copy` and then `gulp dev`
 
 ## Data sources
 
-Open-data from [SITG](http://ge.ch/sitg/) : ["Accidents de la circulation (depuis 2010)"](http://ge.ch/sitg/sitg_catalog/data_details/ea200bbb-ad3b-4bf2-977c-c8bc311eae61/xhtml_raw)
+### Traffic accidents 
+
+Data are provided by the [SITG](http://ge.ch/sitg/) (territorial information system of Geneva).
+They are named "Accidents de la circulation (depuis 2010)"
+Here's a complete description, including the list of features : ["Accidents de la circulation (depuis 2010)"](http://ge.ch/sitg/sitg_catalog/data_details/ea200bbb-ad3b-4bf2-977c-c8bc311eae61/xhtml_raw). 
+The last updated data can be downloaded [here (CSV file)](http://ge.ch/sitg/sitg_catalog/data_downloads/ea200bbb-ad3b-4bf2-977c-c8bc311eae61/CSV_OTC_ACCIDENTS.zip).
+
+### Map
+
+The map comes from [OpenStreetMap](https://www.openstreetmap.org/).
 
 ## Technologies used
 
-[Bootstrap](https://getbootstrap.com/) : open source toolkit for developing with HTML, CSS, and JS
-[LeafletJS](http://leafletjs.com): open source JS library for mobile-friendly interactive maps
+### Languages 
+
+HTML5, CSS3, Javascript, Python.
+
+### Librairies/Frameworks
+
+[Bootstrap](https://getbootstrap.com/) : open source toolkit for developing with HTML, CSS, and JS.\
+[LeafletJS](http://leafletjs.com): open source JS library for mobile-friendly interactive maps.
+
+## Authors
+
+- Maxime Burri : maxime.burri@master.hes-so.ch
+- Salvatore Cicciù : salvatore.cicciu@master.hes-so.ch
+- Michaël Polla : michael@polla.net
