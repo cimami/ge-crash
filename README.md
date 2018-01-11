@@ -1,8 +1,12 @@
 <!-- markdownlint-disable MD009 -->
 
-# ge-crash
+# GE-Crash
 
-HES-SO MSE Visualization Information course project
+This project offers a visualization of the traffic accidents that happened since 2010 in Geneva, Switzerland, in a selected time frame.
+
+This work has been done as part of the HES-SO MSE Visualization Information course.
+
+![Application preview](docs/app_general_view.png)
 
 ## Installation & execution
 
