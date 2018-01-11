@@ -171,3 +171,8 @@ output {
 .right-info a{
     color : white;
 }
+
+.leaflet-popup-content {
+    max-height: 400px;
+    overflow-y: scroll;
+}

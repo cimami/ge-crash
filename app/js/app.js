@@ -415,6 +415,13 @@ $(document).ready(function () {
     return a.NB_BUS + a.NB_TRAM;
   }
 
+  String.prototype.format = function () {
+    var args = [].slice.call(arguments);
+    return this.replace(/(\{\d+\})/g, function (a){
+        return args[+(a.substr(1,a.length-2))||0];
+    });
+  };
+
   // On play click
   btnPlay.click(function () {
     updateInfoByDateInputs();
@@ -453,20 +460,68 @@ $(document).ready(function () {
           if (accident.DATE_ < currentDate) {
             // Draw Marker
             var latLng = L.latLng(accident.LAT, accident.LNG);
+            
+            var nbFourWheel = getNbFourWheel(accident);
+            var nbTwoWheel = getNbTwoWheel(accident);
+            var nbTpg = getNbTpg(accident);
 
-
+            var htmlDetail = `
+            <div style="min-width:600px;">
+              <h2>Accident</h2> 
+              <table>
+                <tr>
+                  <th>ID accident </th><td>{0}</td>
+                </tr>
+                <tr>
+                  <th>Date </th><td>{1}</td>
+                </tr>
+                <tr>
+                  <th>Cause </th><td>{2}</td>
+                </tr>
+                <tr>
+                  <th>Conséquences </th><td>{3}</td>
+                </tr>
+                <tr>
+                  <th>Blessés légers </th><td>{4}</td>
+                </tr>
+                <tr>
+                  <th>Blessés graves </th><td>{5}</td>
+                </tr>
+                <tr>
+                  <th>Morts </th><td>{6}</td>
+                </tr>
+                <tr>
+                  <th>Quatres-roues impliqués </th><td>{7}</td>
+                </tr>
+                <tr>
+                  <th>Deux-roues impliqués </th><td>{8}</td>
+                </tr>
+                <tr>
+                  <th>Transports publiques impliqués </th><td>{9}</td>
+                </tr>
+              </table>
+            </div>
+            `.format(
+              accident.ID_ACCIDENT,
+              accident.DATE_.toLocaleString(),
+              accident.CAUSE,
+              accident.CONSEQUENCES,
+              accident.NB_BLESSES_LEGERS + " <i class='fa fa-male'></i>".repeat(accident.NB_BLESSES_LEGERS),
+              accident.NB_BLESSES_GRAVES + " <i class='fa fa-male'></i>".repeat(accident.NB_BLESSES_GRAVES),
+              accident.NB_TUES + " <i class='fa fa-male'></i>".repeat(accident.NB_TUES),
+              nbFourWheel + " <i class='fa fa-car'></i>".repeat(nbFourWheel),
+              nbTwoWheel + " <i class='fa fa-bicycle'></i>".repeat(nbTwoWheel),
+              nbTpg + " <i class='fa fa-subway'></i>".repeat(nbTpg)
+            );
             var marker = L.marker(latLng, {
               fillColor: '#d10000',
               color: '#d10000',
               fillOpacity: 0.1,
               weight: 0.5,
               radius: 5
-            }).bindPopup("ID accident:" + accident.ID_ACCIDENT + "<br>" +
-            "Cause:" + accident.CAUSE + "<br>" +
-            "Conséquences:" + accident.CONSEQUENCES + "<br>" +
-            "Blessés légers:" + accident.NB_BLESSES_LEGERS + "<br>" +
-            "Blessés graves:" + accident.NB_BLESSES_GRAVES + "<br>" +
-            "Morts:" + accident.NB_TUES)
+            }).bindPopup(htmlDetail, {
+                maxWidth : 'auto'
+              })
               .addTo(markers);
 
             let group = "id_" + accident.ID_ACCIDENT;
@@ -478,11 +533,11 @@ $(document).ready(function () {
 
             // Vehicule people
             addIconsTo(rowIconsVehicule, fourWheelIcons, fourWheelCount, 
-              "car", getNbFourWheel(accident), group, marker);
+              "car", nbFourWheel, group, marker);
             addIconsTo(rowIconsVehicule, twoWheelIcons, twoWheelCount,
-              "bicycle", getNbTwoWheel(accident), group, marker);
+              "bicycle", nbTwoWheel, group, marker);
             addIconsTo(rowIconsVehicule, tpgIcons, tpgCount, 
-              "subway", getNbTpg(accident), group, marker);
+              "subway", nbTpg, group, marker);
 
             // Get position real of lattitude and longitude
             var posCircleAnimation = map.layerPointToContainerPoint(
