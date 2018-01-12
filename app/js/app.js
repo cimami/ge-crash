@@ -483,7 +483,8 @@ $(document).ready(function () {
  
   // On play click
   var makeAnimation = function (event, directAtTheEnd) {
-    updateInfoByDateInputs();
+    if(currentTime == 0 || currentTime >= TIME_BEGIN_TO_END)
+      updateInfoByDateInputs();
 
     //Play
     setPlayStatus(true);
