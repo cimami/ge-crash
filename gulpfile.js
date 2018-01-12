@@ -6,7 +6,7 @@ var rename = require("gulp-rename");
 var uglify = require('gulp-uglify');
 var filter = require('gulp-filter');
 var pkg = require('./package.json');
-var serve = require('gulp-serve');
+var webserver = require('gulp-webserver');
 
 // Configure the browserSync task
 gulp.task('browserSync', function() {
@@ -32,7 +32,11 @@ gulp.task('dev', ['copy', 'browserSync'], function() {
   //gulp.watch('data/*.json', browserSync.reload);
 });
 
-gulp.task('serve', serve({
-  root:'app',
-  //port: 1234
-}));
+
+gulp.task('webserver', function() {
+  gulp.src('app')
+    .pipe(webserver({
+      livereload: true,
+      open: true
+    }));
+});
