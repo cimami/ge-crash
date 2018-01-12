@@ -664,10 +664,32 @@ $(document).ready(function () {
 
       // Update piechart less often than calculation/animation
       if (currentTime % TIME_UDPATE_CHARTS == 0 && !directAtTheEnd || currentTime == TIME_BEGIN_TO_END /*end*/) {
+        var totalCauseData = 0;
+
+        var dataCausesSorted = causes.slice(0).sort(function(a, b) {
+          return  b.y - a.y;
+        });
+        dataCausesSorted.forEach(a => totalCauseData+=a.y);
+        
+        var totalCouverture = 0;
+        var other = {name:"Autres<br><i>Autres informations trop peu représentées<i>" , y:0};
+
+        var otherIndexBegin = undefined;
+
+        for (var k in dataCausesSorted){
+          totalCouverture += dataCausesSorted[k].y;
+          if(totalCouverture/totalCauseData > 0.85){
+            if(otherIndexBegin == undefined)
+              otherIndexBegin = k;
+            other.y += dataCausesSorted[k].y;
+          }
+        }
+        console.log(totalCauseData);
+        dataCausesSorted = dataCausesSorted.slice(0, otherIndexBegin);
+        dataCausesSorted.push(other);
+
         causePieChart.series[0].update({
-            data: causes.sort(function(a, b) {
-                return  b.y - a.y;
-            })
+            data: dataCausesSorted
         });
         console.log("update pie chart");
       }
