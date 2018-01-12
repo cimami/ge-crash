@@ -180,7 +180,9 @@ $(document).ready(function () {
     legend: {
       itemStyle: {
         color:"white"
-      }
+      },
+      itemWidth: 580,
+      useHTML : true
     },
     series: [{
         name: 'Cause',
@@ -646,7 +648,8 @@ $(document).ready(function () {
             if(causes[causesPosition[cause]] !== undefined)
               causes[causesPosition[cause]].y++;
             else{
-              var pos = causes.push({name:cause,y : 1}) - 1;
+              var parts = cause.split(" - ");
+              var pos = causes.push({name:parts[0]+"<br>"+"<i style='font-weight:normal'>"+parts[1]+"</i>",y : 1}) - 1;
               causesPosition[cause] = pos;
             }
           }
