@@ -347,8 +347,10 @@ Nous n'avons pas réussi à réaliser tout ce que nous souhaitions pour ce proje
 **Contrôles**
 
 - Permettre à l'utilisateur de repositionner manuellement le slider.
-- Corriger un bug au niveau du bouton pause; lorsqu'on relance l'animation, celle-ci recommence à partir du début au lieu de continuer d'où elle en était.
+- Ajout d'un bouton "Dégrouper" les groupes dans l'affichage
 - Ajout de boutons + et - pour le contrôle du zoom de la carte.
+- Ajout d'un bouton permettant de restreindre les données à la zone actuelle
+- Ajout de filtres
 
 **Données**
 
