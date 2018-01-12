@@ -114,11 +114,11 @@ LeafletJS utilise [OpenStreetMap](https://www.openstreetmap.org/) pour les donn�
 
 ![LeafletJS logo](pictures/leafletjs_logo.png?raw=true "LeafletJS logo")
 
-#### ChartJS
+#### Highcharts
 
 Comme son nom laisse supposer, il s'agit d'une bibliothèque Javascript permettant de réaliser des graphiques de toutes sortes. Nous l'utilisons notamment pour l'histogramme ainsi que le *pie chart* des causes d'accidents.
 
-![ChartJS logo](pictures/chartjs_logo.png?raw=true "ChartJS logo")
+![Highcharts logo](pictures/highcharts.png?raw=true "Highcharts logo")
 
 #### Node.js
 
