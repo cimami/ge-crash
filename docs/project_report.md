@@ -348,7 +348,7 @@ Nous n'avons pas réussi à réaliser tout ce que nous souhaitions pour ce proje
 
 - Permettre à l'utilisateur de repositionner manuellement le slider.
 - Ajout d'un bouton "Dégrouper" les groupes dans l'affichage
-- Ajout de boutons + et - pour le contrôle du zoom de la carte.
+- ~~Ajout de boutons + et - pour le contrôle du zoom de la carte. ~~
 - Ajout d'un bouton permettant de restreindre les données à la zone actuelle
 - Ajout de filtres
 
