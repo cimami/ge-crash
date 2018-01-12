@@ -6,7 +6,9 @@ This project offers a visualization of the traffic accidents that happened since
 
 This work has been done as part of the HES-SO MSE Visualization Information course.
 
-![Application preview](docs/app_general_view.png?raw=true "Application preview")
+You can read the complete **project report** (in french) [here](docs/project_report.md).
+
+![Application preview](docs/pictures/app_general_view.png?raw=true "Application preview")
 
 ## How to use it
 
@@ -33,7 +35,6 @@ This work has been done as part of the HES-SO MSE Visualization Information cour
 ### Traffic accidents 
 
 Data are provided by the [SITG](http://ge.ch/sitg/) (territorial information system of Geneva).
-They are named "Accidents de la circulation (depuis 2010)"
 Here's a complete description, including the list of features : ["Accidents de la circulation (depuis 2010)"](http://ge.ch/sitg/sitg_catalog/data_details/ea200bbb-ad3b-4bf2-977c-c8bc311eae61/xhtml_raw). 
 The last updated data can be downloaded [here (CSV file)](http://ge.ch/sitg/sitg_catalog/data_downloads/ea200bbb-ad3b-4bf2-977c-c8bc311eae61/CSV_OTC_ACCIDENTS.zip).
 
@@ -49,7 +50,7 @@ HTML5, CSS3, Javascript, Python.
 
 ### Librairies/Frameworks
 
-[Bootstrap](https://getbootstrap.com/) : open source toolkit for developing with HTML, CSS, and JS.\
+[Bootstrap](https://getbootstrap.com/): open source toolkit for developing with HTML, CSS, and JS.\
 [LeafletJS](http://leafletjs.com): open source JS library for mobile-friendly interactive maps.
 
 ## Authors
