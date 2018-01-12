@@ -6,9 +6,13 @@ This project offers a visualization of the traffic accidents that happened since
 
 This work has been done as part of the HES-SO MSE Visualization Information course.
 
-You can read the complete **project report** (in french) [here](docs/project_report.md).
-
 ![Application preview](docs/pictures/app_general_view.png?raw=true "Application preview")
+
+## Project documentation
+
+- [**Project report**](docs/project_report.md) (in french)
+- [**Slides of the presentation**](docs/GE-Crash_presentation.pdf) given on the 12th January 2018.
+- [**Preview of the project**](http://129.194.187.137:8000). Works best with **Google Chrome**.
 
 ## How to use it
 
