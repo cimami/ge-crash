@@ -9,7 +9,7 @@ $(document).ready(function () {
   // Create the map
   var options = {
     attributionControl: false,
-    zoomControl: false,
+    zoomControl: true,
     maxZoom : 18,
     "scaleRadius": true,
   };
