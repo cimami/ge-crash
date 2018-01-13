@@ -40,3 +40,12 @@ gulp.task('webserver', function() {
       open: true
     }));
 });
+
+gulp.task('server', function() {
+  return gulp.src('./app/').pipe(webserver({
+      host: '0.0.0.0',
+      port: process.env.PORT || 5000,
+      https: false,
+      open: true
+  }));
+});
