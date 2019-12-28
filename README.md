@@ -12,7 +12,7 @@ This work has been done as part of the HES-SO MSE Visualization Information cour
 
 - [**Project report**](docs/project_report.md) (in french)
 - [**Slides of the presentation**](docs/GE-Crash_presentation.pdf) given on the 12th January 2018.
-- [**Preview of the project**](http://129.194.187.137:8000). Works best with **Google Chrome**.
+- [**Preview of the project**](https://cimami.github.io/ge-crash). Works best with **Google Chrome**.
 
 ## How to use it
 
