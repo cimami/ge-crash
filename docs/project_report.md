@@ -162,7 +162,7 @@ Cette section présente le travail réalisé ainsi que les choix effectués.
 
 Notre visualisation est présentée sur une unique page web.
 
-Lorsque l'on arrive dessus, une animation est automatiquement démarrée. Celle-ci représente les accidents ayant eu lieu à Genève durant toute l'année 2016. L'utilisateur voit au fil des secondes les incidents s'ajouter sur la carte.
+Lorsque l'on arrive dessus, une animation est automatiquement démarrée. Celle-ci représente les accidents ayant eu lieu à Genève durant toute l'année 2018. L'utilisateur voit au fil des secondes les incidents s'ajouter sur la carte.
 
 Voici une vue générale de l'application, en cours d'animation :
 

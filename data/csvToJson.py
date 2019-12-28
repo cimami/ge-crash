@@ -7,11 +7,14 @@ from GPSConverter import GPSConverter
 
 # The OTC_ACCIDENTS.csv is encoded ih Windows-1252.
 # This converts it to utf8 (in fact, any encoding will be 'converted' to utf8)
+
+
 def convertfile():
-    with codecs.open('./data/CSV_OTC_ACCIDENTS/OTC_ACCIDENTS.csv', 'r', encoding = 'utf8') as file:
+    with codecs.open('./CSV_OTC_ACCIDENTS/OTC_ACCIDENTS.csv', 'r', encoding='ISO-8859-1') as file:
         lines = file.read()
-    with codecs.open('./accidents.json', 'w', encoding = 'utf8') as file:
+    with codecs.open('./accidents-utf8.csv', 'w', encoding='utf8') as file:
         file.write(lines)
+
 
 # Converts some attributes and remove others..
 KEYS_STRING = [
@@ -57,22 +60,25 @@ KEYS_INTEGER = [
 converter = GPSConverter()
 
 
-
-
 def arrange(rows):
     for accident in rows:
         # Convert attribute to integer or string or delete
         for attr in list(accident):
             if attr in KEYS_INTEGER:
-                accident[attr] = int(float(accident[attr]))
+                if not accident[attr]:
+                    accident[attr] = 0
+                else:
+                    accident[attr] = int(float(accident[attr]))
             elif attr not in KEYS_STRING:
                 del accident[attr]
 
         # Convert coordinate CH1903+ to long lat
         # CH1903+ is used (LV03) but it's CH1995 -> so -2000000.00 to EAST and -1000000 to NORTH
         # https://www.swisstopo.admin.ch/fr/cartes-donnees-en-ligne/calculation-services/navref.html
-        accident["LAT"] = converter.CHtoWGSlat(accident["E"]-2000000.00 , accident["N"]-1000000.00 )
-        accident["LNG"] = converter.CHtoWGSlng(accident["E"]-2000000.00 , accident["N"]-1000000.00 )
+        accident["LAT"] = converter.CHtoWGSlat(
+            accident["E"]-2000000.00, accident["N"]-1000000.00)
+        accident["LNG"] = converter.CHtoWGSlng(
+            accident["E"]-2000000.00, accident["N"]-1000000.00)
 
         # Concat date and hour
         datetimeAccident = accident["DATE_"][:10]
@@ -83,13 +89,15 @@ def arrange(rows):
             datetimeAccident = datetimeAccident + " 00:00:00"
         accident["DATE_"] = datetimeAccident
 
+
 convertfile()
-reader = csv.DictReader(open('./accidents.json', 'rb'), delimiter=";")
+reader = csv.DictReader(open('./accidents-utf8.csv', 'rb'), delimiter=";")
 rows = list(reader)
 arrange(rows)
-rows.sort(key=lambda x: datetime.datetime.strptime(x['DATE_'], '%Y-%m-%d %H:%M:%S'))
+rows.sort(key=lambda x: datetime.datetime.strptime(
+    x['DATE_'], '%Y-%m-%d %H:%M:%S'))
 
-#print rows
+# print rows
 
 with open('./accidents.json', 'w') as f:
     json.dump(rows, f)
