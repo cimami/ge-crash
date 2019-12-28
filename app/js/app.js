@@ -463,8 +463,7 @@ $(document).ready(function () {
   inputDateEnd.on("change", udpateMarkersWithoutAnimation);
 
   function getNbTwoWheel(a){
-    return a.NB_BICYCLETTES + a.NB_CYCLOMOTEURS + a.NB_MOTOS_50 + a.NB_MOTOS_125 
-     + a.NB_MOTOS_11KW + a.NB_VAE_25 + a.NB_VAE_45;
+    return a.NB_BICYCLETTES + a.NB_CYCLOMOTEURS + a.NB_MOTOS_50 + a.NB_VAE_25 + a.NB_VAE_45;
   }
   
   function getNbFourWheel(a){
