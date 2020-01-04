@@ -4,54 +4,58 @@ $(document).ready(function () {
   var markerIcon = L.icon({
     iconUrl: 'marker.png',
     iconAnchor: [12, 12]
-});
+  });
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
 
   // Create the map
   var options = {
     attributionControl: false,
     zoomControl: true,
-    maxZoom : 18,
+    maxZoom: 18,
     "scaleRadius": true,
   };
   var map = L.map('mapCrash', options);
-  
+
   // Add mask in other canton than Geneva
   let polygons = [];
   // Foreach "Polygons"
-  for(var i = 0; i < boundaries.geometry.coordinates.length; i++){
+  for (var i = 0; i < boundaries.geometry.coordinates.length; i++) {
     let polygon = geoJsonCoordinateToLatLng(boundaries.geometry.coordinates[i][0]);
     polygons.push(polygon);
   }
   // Mask
   L.mask(polygons).addTo(map);
-  map.fitBounds([[46.2980, 6.2975],[46.1329, 6.0091]]);
+  map.fitBounds([[46.2980, 6.2975], [46.1329, 6.0091]]);
 
   //var markers = L.markerClusterGroup(); // For clustering marker
   var markers = L.markerClusterGroup({
     iconCreateFunction: function (cluster) {
       var nbAccident = cluster.getChildCount();
-      var className ='mycluster1';
+      var className = 'mycluster1';
       var size = 40;
-      
-      if(nbAccident>nbMarkerClusterMax)
-        nbMarkerClusterMax=nbAccident
 
-      if(nbAccident <(0.33*nbMarkerClusterMax)){
-        className ='clusterGreen';
-        size=40;
-      }else if(nbAccident >=(0.33*nbMarkerClusterMax) && nbAccident< (0.66*nbMarkerClusterMax)){
-        className ='clusterYellow';
-        size=50;
-      }else{
-        className ='clusterRed';
-        size=60;
+      if (nbAccident > nbMarkerClusterMax)
+        nbMarkerClusterMax = nbAccident
+
+      if (nbAccident < (0.33 * nbMarkerClusterMax)) {
+        className = 'clusterGreen';
+        size = 40;
+      } else if (nbAccident >= (0.33 * nbMarkerClusterMax) && nbAccident < (0.66 * nbMarkerClusterMax)) {
+        className = 'clusterYellow';
+        size = 50;
+      } else {
+        className = 'clusterRed';
+        size = 60;
       }
-      
-      return L.divIcon({ html: "<span>"+nbAccident+"</span>", className: className, iconSize: L.point(size, size) });
+
+      return L.divIcon({ html: "<span>" + nbAccident + "</span>", className: className, iconSize: L.point(size, size) });
     }
   });
 
-  map.on('zoomend',function(){
+  map.on('zoomend', function () {
     nbMarkerClusterMax = 0;
     markers.refreshClusters();
   })
@@ -59,7 +63,7 @@ $(document).ready(function () {
 
   map.addLayer(markers);
 
-  var heat = L.heatLayer([], {radius: 20}).addTo(map);
+  var heat = L.heatLayer([], { radius: 20 }).addTo(map);
 
   var btnPlay = $("#btnPlay");
   var btnStop = $("#btnStop");
@@ -109,7 +113,7 @@ $(document).ready(function () {
   var dateEnd;
   var timeExtend;
   var accidentsBetweenTime;
-  
+
   myChart = Highcharts.chart('histogram', {
     title: {
       text: ''
@@ -117,7 +121,7 @@ $(document).ready(function () {
     series: [{
       name: "Nombre d'accident",
       type: 'histogram',
-      data: [] 
+      data: []
     }],
     credits: {
       enabled: false
@@ -126,7 +130,7 @@ $(document).ready(function () {
       spacingBottom: 0,
       spacingRight: 3,
       spacingLeft: 3,
-      marginBottom : 40
+      marginBottom: 40
     },
     yAxis: {
       labels: {
@@ -146,56 +150,56 @@ $(document).ready(function () {
 
   var causePieChart = Highcharts.chart('causePieChart', {
     chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie',
-        backgroundColor:'rgba(255, 255, 255, 0.0)'
+      plotBackgroundColor: null,
+      plotBorderWidth: null,
+      plotShadow: false,
+      type: 'pie',
+      backgroundColor: 'rgba(255, 255, 255, 0.0)'
     },
     title: {
-        text: ''
+      text: ''
     },
     credits: {
       enabled: false
     },
     tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> ({point.y})'
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> ({point.y})'
     },
     colors: ["#7cb5ec", "#ededed", "#90ed7d", "#f7a35c", "#8085e9", "#f15c80", "#e4d354", "#2b908f", "#f45b5b", "#91e8e1"],
     plotOptions: {
-        pie: {
-            borderWidth : null,
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-                enabled: true,
-                format: '{point.percentage:.1f} %',
-                style: {
-                    color: 'white'
-                }
-            },
-            showInLegend: true
-        }
+      pie: {
+        borderWidth: null,
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: true,
+          format: '{point.percentage:.1f} %',
+          style: {
+            color: 'white'
+          }
+        },
+        showInLegend: true
+      }
     },
     legend: {
       itemStyle: {
-        color:"white"
+        color: "white"
       },
       itemWidth: 580,
-      useHTML : true
+      useHTML: true
     },
     series: [{
-        name: 'Cause',
-        colorByPoint: true,
-        data: []
+      name: 'Cause',
+      colorByPoint: true,
+      data: []
     }]
-});
+  });
 
   var heatmapEnabled = true;
   $("#heatmap").on("change",
-    function(){
+    function () {
       heatmapEnabled = $(this).is(":checked");
-      if($(this).is(":checked")){
+      if ($(this).is(":checked")) {
         map.addLayer(heat);
         // Actualize
         udpateMarkersWithoutAnimation();
@@ -207,8 +211,8 @@ $(document).ready(function () {
 
   var circleEnabled = true;
   $("#circleEnabled").on("change",
-    function(){
-      if($(this).is(":checked"))
+    function () {
+      if ($(this).is(":checked"))
         circleEnabled = true;
       else
         circleEnabled = false;
@@ -218,12 +222,12 @@ $(document).ready(function () {
   // Modify offset of position of current date
   function modifyOffset() {
     var el, newPoint, newPlace, offset, siblings, k;
-    width    = this.offsetWidth;
+    width = this.offsetWidth;
     newPoint = (this.value - this.getAttribute("min")) / (this.getAttribute("max") - this.getAttribute("min"));
-    offset   = -1;
-    if (newPoint < 0) { newPlace = 0;  }
+    offset = -1;
+    if (newPoint < 0) { newPlace = 0; }
     else if (newPoint > 1) { newPlace = width; }
-    else { newPlace = width * newPoint + offset; offset -= newPoint;}
+    else { newPlace = width * newPoint + offset; offset -= newPoint; }
     siblings = this.parentNode.childNodes;
     for (var i = 0; i < siblings.length; i++) {
       sibling = siblings[i];
@@ -232,7 +236,7 @@ $(document).ready(function () {
         outputTag = sibling;
       }
     }
-    outputTag.style.left       = newPlace + "px";
+    outputTag.style.left = newPlace + "px";
     outputTag.style.marginLeft = offset + "%";
     //outputTag.innerHTML        = this.value;
   }
@@ -255,28 +259,28 @@ $(document).ready(function () {
   // Save bound to restore when mouse leave
   var bounds = undefined;
 
-  var updateFontSizeIcons = function(rowIcons, loopCheck){
-    do{
-      if(rightInfoPanel.offsetHeight < rightInfoPanel.scrollHeight){
+  var updateFontSizeIcons = function (rowIcons, loopCheck) {
+    do {
+      if (rightInfoPanel.offsetHeight < rightInfoPanel.scrollHeight) {
         var fontSize = parseFloat(rowIcons.css("font-size"));
-    
-        if(fontSize > MIN_ICONS_PERSON_FONT_SIZE){
-          fontSize = (fontSize - (loopCheck?1:0.2)) + "px";
+
+        if (fontSize > MIN_ICONS_PERSON_FONT_SIZE) {
+          fontSize = (fontSize - (loopCheck ? 1 : 0.2)) + "px";
 
           // Animate font size
           $(rowIcons).css({
             fontSize: fontSize
           });
-        }else
+        } else
           loopCheck = false;
-      }else
+      } else
         loopCheck = false;
-    }while(loopCheck)
+    } while (loopCheck)
   }
 
   // Add nb icon to divContainer
-  var addIconsTo = function (rowIcons, divContainer, countSpan, classIcon, nb, group, marker,directAtTheEnd) {
-    if(nb > 0){
+  var addIconsTo = function (rowIcons, divContainer, countSpan, classIcon, nb, group, marker, directAtTheEnd) {
+    if (nb > 0) {
       // Keep open or not when click
       var keepOpen = false;
 
@@ -290,7 +294,7 @@ $(document).ready(function () {
           timerEnter = undefined;
 
           if (!bounds)
-          bounds = map.getBounds();
+            bounds = map.getBounds();
 
           // Open popup
           //
@@ -306,7 +310,7 @@ $(document).ready(function () {
           map.flyTo(marker.getLatLng(), 18,
             { animate: true, duration: 1.0 }
           );
-        }, 800);    
+        }, 800);
 
         // Color each calss
         $("." + group).each(function (el) {
@@ -358,9 +362,9 @@ $(document).ready(function () {
   // On stop click
   btnStop.click(clearAll);
 
-  function clearAll(){
+  function clearAll() {
     markers.clearLayers(); // reset markers layer
-    if(heatmapEnabled)
+    if (heatmapEnabled)
       heat.setLatLngs([]) // reset heat map
 
     // Clear interval
@@ -407,13 +411,13 @@ $(document).ready(function () {
     clearInterval(timer);
   });
 
-  function resetCausesChart(){
+  function resetCausesChart() {
     causes = [];
     causesPosition = {};
     causePieChart.series[0].setData([]);
   }
 
-  function updateInfoByDateInputs(){
+  function updateInfoByDateInputs() {
     clearAll();
 
     dateBegin = new Date(inputDateBegin.val());
@@ -430,12 +434,12 @@ $(document).ready(function () {
     var histogramBars = [];
     var currentBar = 1;
 
-    for(i = 0; i < accidentsBetweenTime.length; i++){
-      if(accidentsBetweenTime[i].DATE_ < new Date(dateBegin.getTime()+(currentBar)*timeSizeBar)){
+    for (i = 0; i < accidentsBetweenTime.length; i++) {
+      if (accidentsBetweenTime[i].DATE_ < new Date(dateBegin.getTime() + (currentBar) * timeSizeBar)) {
         nbAccidentCurrentBar++;
       }
-      else{
-        while(accidentsBetweenTime[i].DATE_ >= new Date(dateBegin.getTime()+(currentBar)*timeSizeBar)){
+      else {
+        while (accidentsBetweenTime[i].DATE_ >= new Date(dateBegin.getTime() + (currentBar) * timeSizeBar)) {
           currentBar++;
           histogramBars.push(nbAccidentCurrentBar);
           nbAccidentCurrentBar = 0;
@@ -444,47 +448,47 @@ $(document).ready(function () {
       }
     }
     histogramBars.push(nbAccidentCurrentBar);
-    while(currentBar < nbBar){
+    while (currentBar < nbBar) {
       histogramBars.push(0);
       currentBar++;
     }
-    myChart.series[0].update( {
-      data : histogramBars,
+    myChart.series[0].update({
+      data: histogramBars,
       pointStart: Date.UTC(dateBegin.getFullYear(), dateBegin.getMonth(), dateBegin.getDate()),
       pointInterval: timeSizeBar
     }, true);
   }
 
-  var udpateMarkersWithoutAnimation = function(){
+  var udpateMarkersWithoutAnimation = function () {
     makeAnimation(null, true);
   }
 
   inputDateBegin.on("change", udpateMarkersWithoutAnimation);
   inputDateEnd.on("change", udpateMarkersWithoutAnimation);
 
-  function getNbTwoWheel(a){
+  function getNbTwoWheel(a) {
     return a.NB_BICYCLETTES + a.NB_CYCLOMOTEURS + a.NB_MOTOS_50 + a.NB_VAE_25 + a.NB_VAE_45;
   }
-  
-  function getNbFourWheel(a){
+
+  function getNbFourWheel(a) {
     return a.NB_VOITURES_TOURISME + a.NB_VOITURES_LIVRAISON
       + a.NB_CAMIONS;
   }
 
-  function getNbTpg(a){
+  function getNbTpg(a) {
     return a.NB_BUS + a.NB_TRAM;
   }
 
   String.prototype.format = function () {
     var args = [].slice.call(arguments);
-    return this.replace(/(\{\d+\})/g, function (a){
-        return args[+(a.substr(1,a.length-2))||0];
+    return this.replace(/(\{\d+\})/g, function (a) {
+      return args[+(a.substr(1, a.length - 2)) || 0];
     });
   };
- 
+
   // On play click
   var makeAnimation = function (event, directAtTheEnd) {
-    if(currentTime == 0 || currentTime >= TIME_BEGIN_TO_END)
+    if (currentTime == 0 || currentTime >= TIME_BEGIN_TO_END)
       updateInfoByDateInputs();
 
     //Play
@@ -494,9 +498,9 @@ $(document).ready(function () {
     clearInterval(timer);
 
     // Direct at the end ?
-    if(directAtTheEnd === undefined)
+    if (directAtTheEnd === undefined)
       directAtTheEnd = false;
-    if(directAtTheEnd){
+    if (directAtTheEnd) {
       currentTime = TIME_BEGIN_TO_END - TIME_FRAME; // Go and simulate last frame
       $("#loading").show();
     }
@@ -512,7 +516,7 @@ $(document).ready(function () {
       if (currentSliderValue > SLIDER_MAX_RANGE) {
         clearInterval(timer);
         setPlayStatus(false);
-        if(directAtTheEnd){
+        if (directAtTheEnd) {
           $("#loading").hide();
           updateFontSizeIcons(rowIconsInjured, true);
           updateFontSizeIcons(rowIconsVehicule, true);
@@ -535,7 +539,7 @@ $(document).ready(function () {
           if (accident.DATE_ < currentDate) {
             // Draw Marker
             var latLng = L.latLng(accident.LAT, accident.LNG);
-            
+
             var nbFourWheel = getNbFourWheel(accident);
             var nbTwoWheel = getNbTwoWheel(accident);
             var nbTpg = getNbTpg(accident);
@@ -594,28 +598,28 @@ $(document).ready(function () {
               fillOpacity: 0.1,
               weight: 0.5,
               radius: 5,
-              icon:markerIcon
+              icon: markerIcon
             }).bindPopup(htmlDetail, {
-                maxWidth : 'auto'
-              })
+              maxWidth: 'auto'
+            })
               .addTo(markers);
 
             let group = "id_" + accident.ID_ACCIDENT;
-            
+
             // Injured people icons
             addIconsTo(rowIconsInjured, injuredIcons, injuredsCount, "male", accident.NB_BLESSES_LEGERS, group, marker, directAtTheEnd);
             addIconsTo(rowIconsInjured, heavyInjuredIcons, heavyInjuredCount, "male", accident.NB_BLESSES_GRAVES, group, marker, directAtTheEnd);
             addIconsTo(rowIconsInjured, deathsIcons, deathsCount, "male", accident.NB_TUES, group, marker, directAtTheEnd);
 
             // Vehicule people
-            addIconsTo(rowIconsVehicule, fourWheelIcons, fourWheelCount, 
+            addIconsTo(rowIconsVehicule, fourWheelIcons, fourWheelCount,
               "car", nbFourWheel, group, marker, directAtTheEnd);
             addIconsTo(rowIconsVehicule, twoWheelIcons, twoWheelCount,
               "bicycle", nbTwoWheel, group, marker, directAtTheEnd);
-            addIconsTo(rowIconsVehicule, tpgIcons, tpgCount, 
+            addIconsTo(rowIconsVehicule, tpgIcons, tpgCount,
               "subway", nbTpg, group, marker, directAtTheEnd);
-            
-            if(circleEnabled && !directAtTheEnd){
+
+            if (circleEnabled && !directAtTheEnd) {
               // Get position real of lattitude and longitude
               var posCircleAnimation = map.layerPointToContainerPoint(
                 map.latLngToLayerPoint(L.latLng(latLng))
@@ -638,17 +642,17 @@ $(document).ready(function () {
                   $(this).remove();
                 });
             }
-            
-            if(heatmapEnabled)
+
+            if (heatmapEnabled)
               heat.addLatLng(latLng);
 
             // Increment causes 
             var cause = accident.CAUSE;
-            if(causes[causesPosition[cause]] !== undefined)
+            if (causes[causesPosition[cause]] !== undefined)
               causes[causesPosition[cause]].y++;
-            else{
+            else {
               var parts = cause.split(" - ");
-              var pos = causes.push({name:parts[0]+"<br>"+"<i style='font-weight:normal'>"+parts[1]+"</i>",y : 1}) - 1;
+              var pos = causes.push({ name: parts[0] + "<br>" + "<i style='font-weight:normal'>" + parts[1] + "</i>", y: 1 }) - 1;
               causesPosition[cause] = pos;
             }
           }
@@ -665,20 +669,20 @@ $(document).ready(function () {
       if (currentTime % TIME_UDPATE_CHARTS == 0 && !directAtTheEnd || currentTime == TIME_BEGIN_TO_END /*end*/) {
         var totalCauseData = 0;
 
-        var dataCausesSorted = causes.slice(0).sort(function(a, b) {
-          return  b.y - a.y;
+        var dataCausesSorted = causes.slice(0).sort(function (a, b) {
+          return b.y - a.y;
         });
-        dataCausesSorted.forEach(a => totalCauseData+=a.y);
-        
+        dataCausesSorted.forEach(a => totalCauseData += a.y);
+
         var totalCouverture = 0;
-        var other = {name:"Autres<br><i>Autres informations trop peu représentées<i>" , y:0};
+        var other = { name: "Autres<br><i>Autres informations trop peu représentées<i>", y: 0 };
 
         var otherIndexBegin = undefined;
 
-        for (var k in dataCausesSorted){
+        for (var k in dataCausesSorted) {
           totalCouverture += dataCausesSorted[k].y;
-          if(totalCouverture/totalCauseData > 0.85){
-            if(otherIndexBegin == undefined)
+          if (totalCouverture / totalCauseData > 0.85) {
+            if (otherIndexBegin == undefined)
               otherIndexBegin = k;
             other.y += dataCausesSorted[k].y;
           }
@@ -688,7 +692,7 @@ $(document).ready(function () {
         dataCausesSorted.push(other);
 
         causePieChart.series[0].update({
-            data: dataCausesSorted
+          data: dataCausesSorted
         });
         console.log("update pie chart");
       }

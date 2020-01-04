@@ -5,31 +5,34 @@
   <title>GE Crash</title>
   <meta charset="utf-8">
   <link rel="icon" type="image/png" href="favicon.png" />
-  
+
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+    integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
     crossorigin="" />
 
-  <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+  <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+    integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
     crossorigin=""></script>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
-    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+    integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
 
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-    crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/locale/fr-ch.js"></script>
 
   <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.2.0/dist/MarkerCluster.css" />
-  <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.2.0/dist/MarkerCluster.Default.css"
-  />
-  <script type='text/javascript' src='https://unpkg.com/leaflet.markercluster@1.2.0/dist/leaflet.markercluster.js'></script>
+  <link rel="stylesheet" type="text/css"
+    href="https://unpkg.com/leaflet.markercluster@1.2.0/dist/MarkerCluster.Default.css" />
+  <script type='text/javascript'
+    src='https://unpkg.com/leaflet.markercluster@1.2.0/dist/leaflet.markercluster.js'></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js" integrity="sha256-65UqrlgGoRAnKfKRuriH3eeDrOhZgZo1SCenduc+SGo="
-    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"
+    integrity="sha256-65UqrlgGoRAnKfKRuriH3eeDrOhZgZo1SCenduc+SGo=" crossorigin="anonymous"></script>
 
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
@@ -39,18 +42,27 @@
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <a class="navbar-brand" href="#">GE Crash</a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
-      aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <i class="nav-link disabled">Accidents à Genève</i>
+
+
       <ul class="navbar-nav mr-auto">
         <!-- Nav bar in future -->
       </ul>
       <form class="form-inline mt-2 mt-md-0">
         <!-- Input if necessary-->
         <!--<i class="nav-link disabled">Michaël POLLA, Maxime BURRI & Salvatore Cicciù</i>-->
+        <a class="nav-link disabled" data-toggle="tooltip" data-placement="right" title="Source : Système
+      d'information du territoire à Genève (SITG), extrait en date du 21.12.19" href="https://ge.ch/sitg/"> <i
+            class="fa fa-database"></i>
+          Source: SITG</a>
+
+        <a class="nav-link disabled" href="https://github.com/cimami/ge-crash"><i class="fa fa-github"></i>
+          Code source</a>
       </form>
     </div>
   </nav>
@@ -72,7 +84,7 @@
       </ul>
 
       <!-- Tab panes -->
-      <div class="tab-content" >
+      <div class="tab-content">
         <div role="tabpanel" class="tab-pane active fade in show" id="injured">
           <table class="table-count">
             <tr>
@@ -150,13 +162,13 @@
   <div class="card player" style="    left: 0%;
   transform: translateX(0%);">
     <div class="card-block">
-          <h1 style="font-size:12pt;">Affichage</h3>
-          <input type="checkbox"  id="heatmap" checked>
-          <label style="margin:0" for="heatmap">Heatmap</label><br/>
-          <!--<input type="checkbox"  id="group" checked>
+      <h1 style="font-size:12pt;">Affichage</h3>
+        <input type="checkbox" id="heatmap" checked>
+        <label style="margin:0" for="heatmap">Heatmap</label><br />
+        <!--<input type="checkbox"  id="group" checked>
           <label style="margin:0" for="group" >Regrouper</label><br/>-->
-          <input type="checkbox"  id="circleEnabled" checked>
-          <label style="margin:0" for="circleEnabled">Cercle animatif</label>
+        <input type="checkbox" id="circleEnabled" checked>
+        <label style="margin:0" for="circleEnabled">Cercle animatif</label>
     </div>
   </div>
 
@@ -178,8 +190,8 @@
         </div>
         <div style="width:100%;">
           <form>
-            <input name="slider" id="slider" class="slider" style="width:100%;" type="range" min="0" max="100000" value="0" step="1"
-            />
+            <input name="slider" id="slider" class="slider" style="width:100%;" type="range" min="0" max="100000"
+              value="0" step="1" />
             <output for="slider">
               <span id="currentDateElement"></span>
             </output>
@@ -199,12 +211,16 @@
   <!-- Bootstrap core JavaScript
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+    integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
     crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+    integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
     crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
-    crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>/>
 
   <script src="./js/genevaBoundaries.js"></script>
   <script src="./js/Leaflet.Mask.js"></script>
