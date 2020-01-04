@@ -59,6 +59,6 @@ HTML5, CSS3, Javascript, Python.
 
 ## Authors
 
-- Maxime Burri : maxime.burri@master.hes-so.ch
-- Salvatore Cicciù : salvatore.cicciu@master.hes-so.ch
+- Maxime Burri
+- Salvatore Cicciù
 - Michaël Polla : michael@polla.net
